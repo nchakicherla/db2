@@ -1,12 +1,12 @@
 #include "../../include/lib/common.h"
 
-#include "../../include/lib/mempool.h"
+#include "../../include/lib/m_arena.h"
 #include <stdio.h>
 
 #define MEMORY_HOG_FACTOR 8
 #define DEF_BLOCK_INIT_SIZE 1024
 /*
-static inline Block *getLastBlock(MemPool *pool) {
+static inline Block *getLastBlock(Arena *pool) {
 	
 	Block *current = pool->first_block;
 	Block *next = current->next;
@@ -38,7 +38,7 @@ static Block *newInitBlock(size_t block_size) {
 	return block;
 }
 
-int initMemPool(MemPool *pool) {
+int initArena(Arena *pool) {
 	size_t block_size = DEF_BLOCK_INIT_SIZE;
 /*
 	pool->first_block = malloc(sizeof(Block));
@@ -53,9 +53,10 @@ int initMemPool(MemPool *pool) {
 	pool->first_block->next = NULL;
 */
 	pool->first_block = newInitBlock(block_size);
+	if(!pool->first_block) return 1;
 
 	pool->bytes_used = 0;
-	pool->bytes_allocd = sizeof(MemPool) + sizeof(Block) + block_size;
+	pool->bytes_allocd = sizeof(Arena) + sizeof(Block) + block_size;
 	pool->next_free = pool->first_block->data;
 	pool->next_free_size = pool->first_block->data_size;
 	pool->last_block_size = block_size;
@@ -63,7 +64,7 @@ int initMemPool(MemPool *pool) {
 	return 0;
 }
 
-int termMemPool(MemPool *pool) {
+int termArena(Arena *pool) {
 
 	Block *curr = pool->first_block;
 	Block *next = NULL;
@@ -77,7 +78,7 @@ int termMemPool(MemPool *pool) {
 	return 0;
 }
 
-int resetMemPool(MemPool *pool) {
+int resetArena(Arena *pool) {
 
 	Block *curr = pool->first_block;
 	Block *next = NULL;
@@ -97,11 +98,11 @@ int resetMemPool(MemPool *pool) {
 	// pool->last_block_size = pool->block->data_size;
 
 	pool->bytes_used = 0;
-	pool->bytes_allocd = sizeof(MemPool) + sizeof(Block) + pool->last_block_size;
+	pool->bytes_allocd = sizeof(Arena) + sizeof(Block) + pool->last_block_size;
 	return 0;
 }
 
-void *palloc(MemPool *pool, size_t size) {
+void *palloc(Arena *pool, size_t size) {
 	
 	// Block *last_block = getLastBlock(pool);
 
@@ -142,7 +143,7 @@ void *palloc(MemPool *pool, size_t size) {
 	return output;
 }
 
-void *pzalloc(MemPool *pool, size_t size) {
+void *pzalloc(Arena *pool, size_t size) {
 	void* output = palloc(pool, size);
 	for(size_t i = 0; i < size; i++) {
 		((char *)output)[i] = '\0';
@@ -150,13 +151,13 @@ void *pzalloc(MemPool *pool, size_t size) {
 	return output;
 }
 
-void *pGrowAlloc(void *ptr, size_t old_size, size_t new_size, MemPool *pool) {
+void *pGrowAlloc(void *ptr, size_t old_size, size_t new_size, Arena *pool) {
 	void *output_ptr = palloc(pool, new_size);
 	memcpy(output_ptr, ptr, old_size);
 	return output_ptr;
 }
 
-char *pNewStr(char *str, MemPool *pool) {
+char *pNewStr(char *str, Arena *pool) {
 	
 	char *output = NULL;
 	size_t len = strlen(str);
@@ -171,15 +172,15 @@ char *pNewStr(char *str, MemPool *pool) {
 	return output;
 }
 
-size_t getBytesUsed(MemPool *pool) {
+size_t getBytesUsed(Arena *pool) {
 	return pool->bytes_used;
 }
 
-size_t getBytesAllocd(MemPool *pool) {
+size_t getBytesAllocd(Arena *pool) {
 	return pool->bytes_allocd;
 }
 
-void printPoolInfo(MemPool *pool) {
+void printPoolInfo(Arena *pool) {
 	printf("\nMEMPOOL INFO - \n");
 	printf("\tUSED: %zu, (%f MB)\n", getBytesUsed(pool), (double)getBytesUsed(pool) / (1024 * 1024));
 	printf("\tALLOCD: %zu, (%f MB)\n", getBytesAllocd(pool), (double)getBytesAllocd(pool) / (1024 * 1024));
@@ -187,7 +188,7 @@ void printPoolInfo(MemPool *pool) {
 }
 
 /*
-int memSwap(void *ptr1, void *ptr2, size_t size, MemPool *mPool) {
+int memSwap(void *ptr1, void *ptr2, size_t size, Arena *mPool) {
 	void *temp = palloc(mPool, size);
 	if(!temp) return 1;
 

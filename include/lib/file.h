@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "mempool.h"
+#include "m_arena.h"
 
-char *pReadFile(char *name, MemPool *pool);
+char *pReadFile(const char *name, Arena *pool);
 
 int writeFileChars(char *name, char *source);
 

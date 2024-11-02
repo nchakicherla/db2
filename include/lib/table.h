@@ -2,7 +2,7 @@
 #define TABLE_H
 
 #include "common.h"
-#include "mempool.h"
+#include "m_arena.h"
 #include "object.h"
 
 #include <stdlib.h>
@@ -20,7 +20,7 @@ typedef struct s_Table {
 	size_t count;
 	size_t n_buckets;
 	Entry **entries;
-	MemPool pool;
+	Arena pool;
 } Table;
 
 uint32_t FNV_1a_hash(char* str);

@@ -1,5 +1,5 @@
 #include "../../include/lib/table.h"
-#include "../../include/lib/mempool.h"
+#include "../../include/lib/m_arena.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -24,12 +24,12 @@ int initTable(Table *table) {
 	table->count = 0;
 	table->n_buckets = 0;
 	table->entries = NULL;
-    initMemPool(&(table->pool));
+    initArena(&(table->pool));
     return 0;
 }
 
 int termTable(Table *table) {
-    termMemPool(&(table->pool));
+    termArena(&(table->pool));
     return 0;
 }
 
@@ -44,7 +44,7 @@ void printSortee(Sortee *sortee, size_t n) {
     }
 }
 
-Sortee *makeSorteeArray(Entry *head, MemPool *pool, size_t *counter) {
+Sortee *makeSorteeArray(Entry *head, Arena *pool, size_t *counter) {
 
     size_t n = 1;
     Entry *curr = head;
@@ -95,7 +95,7 @@ bool areStrsInOrder(char *str1, char *str2) {
     }
 }
 
-int sortEntriesByKey(Sortee *array, size_t n, MemPool *pool) { // quicksort
+int sortEntriesByKey(Sortee *array, size_t n, Arena *pool) { // quicksort
 
     if(n <= 1) {
         return 0;

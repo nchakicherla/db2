@@ -17,6 +17,7 @@ OBJS =  	./obj/db/db.o \
 
 LIBOBJS =   ./obj/lib/mempool.o \
 			./obj/lib/table.o \
+			./obj/lib/file.o \
 
 default: reset $(BIN)
 ifeq ($(OS),Darwin) 
