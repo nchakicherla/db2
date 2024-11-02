@@ -11,7 +11,10 @@ int main(void) {
 	CSVReader reader;
 	initCSVReader(&reader);
 
-	tryCSVRead(&reader, "./resources/csv/tyler_the_creator_dataset.csv");
+	int ret = tryCSVRead(&reader, "./resources/csv/tyler_the_creator_dataset.csv");
+	if (ret == 0) {
+		//printf("%s\n", reader.text);
+	}
 
 	termCSVReader(&reader);
 	return 0;

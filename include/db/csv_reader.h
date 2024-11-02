@@ -25,4 +25,6 @@ int tryCSVRead(CSVReader *reader, const char *filename);
 
 
 
+int setDelim(CSVReader *reader, char delim);
+
 #endif // CSV_READER_H

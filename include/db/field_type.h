@@ -26,9 +26,7 @@ typedef enum {
 
 	FT_UUID,
 
-
-
-	FT_,
+	FT_ERR
 } FieldType;
 
 #endif // FIELD_TYPES_H
