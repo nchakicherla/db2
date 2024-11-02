@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-#include "common.h"
 #include "./lib/mempool.h"
 
 int main(void) {
