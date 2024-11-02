@@ -11,7 +11,9 @@ BIN = 		./bin/main.run
 
 MAIN = 		./obj/main.o
 
-OBJS =  	./obj/db/db.o
+OBJS =  	./obj/db/db.o \
+			./obj/db/raw_row.o \
+			./obj/db/csv_reader.o \
 
 LIBOBJS =   ./obj/lib/mempool.o \
 			./obj/lib/table.o \

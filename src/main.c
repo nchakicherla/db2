@@ -4,6 +4,7 @@
 #include "../include/lib/table.h"
 
 #include "../include/db/db.h"
+#include "../include/db/csv_reader.h"
 
 int main(void) {
 
