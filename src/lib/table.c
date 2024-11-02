@@ -1,10 +1,10 @@
-#include "table.h"
-#include "mempool.h"
-#include "string.h"
-
-#define DEF_N_BUCKETS 512
+#include "../../include/lib/table.h"
+#include "../../include/lib/mempool.h"
 
 #include <stdio.h>
+#include <string.h>
+
+#define DEF_N_BUCKETS 512
 
 // https://bpa.st/4P7Q 
 uint32_t FNV_1a_hash(char *str) {

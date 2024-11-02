@@ -1,18 +1,20 @@
 CC = gcc
-CFLAGS = -std=c99 -Wall -Wpedantic -Werror -o3 #-luuid
+CFLAGS = -std=c99 -Wall -Wpedantic -Werror -o3 #-Wno-unused-variable#-luuid
 OS := $(shell uname)
 
 mkBinDir := $(shell mkdir -p bin)
 mkObjDir := $(shell mkdir -p obj)
+mkDbObjDir := $(shell mkdir -p obj/db)
 mkLibObjDir := $(shell mkdir -p obj/lib)
 
-BIN = ./bin/main.run
+BIN = 		./bin/main.run
 
-MAIN = 	./obj/main.o
+MAIN = 		./obj/main.o
 
-LIBOBJS = ./obj/lib/mempool.o
+OBJS =  	./obj/db/db.o
 
-OBJS = 
+LIBOBJS =   ./obj/lib/mempool.o \
+			./obj/lib/table.o \
 
 default: reset $(BIN)
 ifeq ($(OS),Darwin) 
@@ -29,7 +31,10 @@ run: reset $(BIN)
 $(BIN): $(LIBOBJS) $(OBJS) $(MAIN)
 	$(CC) $(CFLAGS) $(LIBOBJS) $(OBJS) $(MAIN) -o $(BIN)
 
-./obj/lib/%.o: ./src/lib/%.c ./src/lib/%.h
+./obj/lib/%.o: ./src/lib/%.c ./include/lib/%.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+./obj/db/%.o: ./src/db/%.c ./include/db/%.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 ./obj/%.o: ./src/%.c ./src/%.h

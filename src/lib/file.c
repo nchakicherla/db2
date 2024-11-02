@@ -1,4 +1,4 @@
-#include "file.h"
+#include "../../include/lib/file.h"
 
 char *pReadFile(char *name, MemPool *pool) {
 	FILE *file = NULL;

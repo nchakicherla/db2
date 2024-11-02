@@ -1,6 +1,6 @@
-#include "common.h"
+#include "../../include/lib/common.h"
 
-#include "mempool.h"
+#include "../../include/lib/mempool.h"
 #include <stdio.h>
 
 #define MEMORY_HOG_FACTOR 8

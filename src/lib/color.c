@@ -1,4 +1,4 @@
-#include "color.h"
+#include "../../include/lib/color.h"
 
 #include <stdio.h>
 

@@ -1,18 +1,11 @@
 #include <stdio.h>
 
-#include "./lib/mempool.h"
+#include "../include/lib/mempool.h"
+#include "../include/lib/table.h"
+
+#include "../include/db/db.h"
 
 int main(void) {
 
-	printf("hello, db2\n");
-
-	MemPool p;
-	initMemPool(&p);
-
-	int *ptr = palloc(&p, sizeof(int));
-	*ptr = 1;
-	printf("%d\n", *ptr);
-
-	termMemPool(&p);
 	return 0;
 }

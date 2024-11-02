@@ -1,4 +1,4 @@
-#include "random.h"
+#include "../../include/lib/random.h"
 
 int64_t randI64(int64_t range) {
 	uint64_t high = ((uint64_t)rand() << 32);
