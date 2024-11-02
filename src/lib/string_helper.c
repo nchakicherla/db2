@@ -4,6 +4,22 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+struct s_StringArray {
+	size_t used;
+	size_t cap;
+	char **strs;
+};
+
+static int priv_growStringArray(struct s_StringArray *arr, Arena *scratch) {
+	char **new_ptr = NULL;
+	if(!(new_ptr = pGrowAlloc(arr->strs, arr->cap, 2 * arr->cap, scratch))) {
+		return 1;
+	}
+	arr->strs = new_ptr;
+	arr->cap = 2 * arr->cap;
+	return 0;
+}
+
 static bool priv_checkAllMatch(bool *vals, size_t n, bool check) {
 	for(size_t i = 0; i < n; i++) {
 		if(vals[i] != check) {
@@ -36,6 +52,11 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 		return NULL;
 	}
 
+	struct s_StringArray helper = {0, 0, NULL};
+	helper.strs = pzalloc(scratch, 8 * sizeof(char *));
+	helper.cap = 8;
+	//printf("%p\n", (void *)&helper);
+
 	size_t n_toks = 1;
 	bool *in_safety = palloc(scratch, safety_begins_len * sizeof(bool));
 	char *tok_start = input;
@@ -61,13 +82,21 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 					temp_token[w] = *(tok_start + w);
 				}
 				temp_token[tok_len] = '\0';
-				printf("%s\n", temp_token);
+				//printf("%s\n", temp_token);
+
+				//helper.strs[n_toks - 1] = palloc(scratch, tok_len + 1);
+				printf("here\n");
+				if(n_toks > helper.cap) {
+					priv_growStringArray(&helper, scratch);
+				}
+				helper.strs[n_toks - 1] = pNewStr(temp_token, scratch);
+				helper.used++;
 
 				i += delim_len;
 				tok_start = &input[i];
 				tok_end = tok_start;
 				n_toks++;
-				continue;
+				//continue;
 			}
 		}
 		for(int j = 0; j < safety_begins_len; j++) {
@@ -88,11 +117,20 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 		temp_token[i] = tok_start[i];
 	}
 	temp_token[tok_len] = '\0';
-	printf("%s\n", temp_token);
+	//printf("%s\n", temp_token);
 
+	if(n_toks >= helper.cap) {
+		priv_growStringArray(&helper, scratch);
+	}
+	helper.strs[n_toks - 1] = pNewStr(temp_token, scratch);
+	helper.used++;
 
 	*n_toks_out = n_toks;
-	printf("n_toks: %zu\n", n_toks);
+	//printf("n_toks: %zu\n", n_toks);
+
+	for(size_t z = 0; z < n_toks; z++) {
+		printf("%s\n", helper.strs[z]);
+	}
 
 	return NULL;
 }
