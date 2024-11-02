@@ -18,6 +18,7 @@ OBJS =  	./obj/db/db.o \
 LIBOBJS =   ./obj/lib/mempool.o \
 			./obj/lib/table.o \
 			./obj/lib/file.o \
+			./obj/lib/string_helper.o \
 
 default: reset $(BIN)
 ifeq ($(OS),Darwin) 

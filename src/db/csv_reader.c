@@ -13,6 +13,16 @@ int initCSVReader(CSVReader *reader) {
 	return 0;
 }
 
+int resetCSVReader(CSVReader *reader) {
+	reader->text = NULL;
+	reader->head = NULL;
+	reader->tail = NULL;
+	reader->n_rows = 0;
+	resetArena(&(reader->p));
+	// keep delim set
+	return 0;
+}
+
 int termCSVReader(CSVReader *reader) {
 	termArena(&(reader->p));
 	return 0;
@@ -50,6 +60,12 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 		memcpy(temp_line, start, end - start);
 		temp_line[end - start] = '\0';
 
+		size_t n_tok = 0;
+		char **split_string = tryStringSplit(temp_line, end - start, ",", "\"", "\"", &scratch, &n_tok);
+		if(split_string) {
+			printf("%p\n", (void *)split_string);
+		}
+
 		if(*end == '\0') {
 			break;
 		}
@@ -65,7 +81,9 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 	return 0;
 }
 
-
+int tryBuildRow(CSVRow *row, char *unsplit, Arena *p) {
+	return 0;
+}
 
 int setDelim(CSVReader *reader, char delim) {
 	if(delim != ',' && delim != ';') {
