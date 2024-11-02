@@ -23,7 +23,7 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 	if(!reader->text) {
 		return 1;
 	}
-	//printf("len: %zu\n", strlen(reader->text));
+
 	size_t n_rows = 1;
 	char *it = reader->text;
 	while(*it != '\0') {
@@ -33,7 +33,6 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 		it++;
 	}
 	reader->n_rows = n_rows;
-	//printf("n_rows: %zu\n", reader->n_rows);
 
 	Arena scratch;
 	initArena(&scratch);
@@ -44,20 +43,19 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 	char *temp_line = NULL;
 
 	while(*start != '\0') {
-		while(*end != '\n' && *end != '\0') {
+		while(*end != 0x03 && *end != '\r' && *end != '\n' && *end != '\0') {
 			end++;
 		}
-		printf("line len: %zu\n", end - start);
 		temp_line = palloc(&scratch, (end - start) + 1);
-		memcpy(temp_line, start, (end - start));
+		memcpy(temp_line, start, end - start);
 		temp_line[end - start] = '\0';
-
-		printf("CURRENT LINE: %s\n\n", temp_line);
 
 		if(*end == '\0') {
 			break;
 		}
-		end++;
+		while(*end == 0x03 || *end == '\r' || *end == '\n' || *end == ' ') {
+			end++;
+		}
 		start = end;
 	}
 	printf("\n");
