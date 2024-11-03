@@ -3,6 +3,7 @@
 
 typedef enum {
 	FT_TEXT,
+	FT_CHAR,
 
 	FT_I8,
 	FT_I16,

@@ -1,8 +1,8 @@
-#ifndef FT_LITERAL_H
-#define FT_LITERAL_H
+#include "../../include/db/ft_labels.h"
 
-static char *FieldTypeLiterals[] = {
+static char *FieldTypeLabels[] = {
 	"TEXT",
+	"CHAR",
 
 	"INT8",
 	"INT16",
@@ -28,6 +28,8 @@ static char *FieldTypeLiterals[] = {
 	"UUID",
 
 	"ERR",
-}
+};
 
-#endif // FT_LITERAL_H
+char* getFieldTypeLabel(int type) {
+	return FieldTypeLabels[type];
+}

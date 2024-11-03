@@ -13,6 +13,7 @@ MAIN = 		./obj/main.o
 
 OBJS =  	./obj/db/db.o \
 			./obj/db/csv_reader.o \
+			./obj/db/ft_labels.o \
 
 LIBOBJS =   ./obj/lib/mempool.o \
 			./obj/lib/table.o \

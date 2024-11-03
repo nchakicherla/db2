@@ -6,6 +6,8 @@
 #include "../include/db/db.h"
 #include "../include/db/csv_reader.h"
 
+#include "../include/db/ft_labels.h"
+
 int main(void) {
 
 	CSVReader reader;
@@ -15,7 +17,12 @@ int main(void) {
 	printf("(%p) get row at %zu\n", (void *)getRowAtIndex(&reader, 235), (size_t)235);
 	printRow(getRowAtIndex(&reader, 235));
 
+	printf("(%d) try reset csv\n", resetCSVReader(&reader));
+	printRow(getRowAtIndex(&reader, 235));
+
 	termCSVReader(&reader);
+
+	printf("test labels: %s\n", getFieldTypeLabel(0));
 	return 0;
 }
 

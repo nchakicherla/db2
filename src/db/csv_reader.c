@@ -202,6 +202,10 @@ int setDelim(CSVReader *reader, char delim) {
 }
 
 void printRow(CSVRow *row) {
+	if(!row) {
+		printf("(none)\n");
+		return;
+	}
 	for(size_t i = 0; i < row->n_cols; i++) {
 		printf("%s ", row->cols[i]);
 		if(i != row->n_cols - 1) {
