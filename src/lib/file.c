@@ -45,4 +45,3 @@ FILE *checkFileOpen(char *name, char *mode) {
 	}
 	return fp;
 }
-
