@@ -9,6 +9,7 @@
 #include "../include/db/ft_enum.h"
 #include "../include/db/ft_labels.h"
 #include "../include/db/ft_validate.h"
+#include "../include/db/datetime.h"
 
 FieldType test_schema[26] = {
 	FT_TEXT,
@@ -72,6 +73,12 @@ int main(void) {
 	if(!validation) {
 		printf("failed!\n");
 	}
+
+	DateTimeFormat fmt;
+	initDateTimeFormat(&fmt);
+
+	fmt = guessFormat("03:30:03");
+	printf("fmt.str: %s\n", fmt.str);
 
 	termCSVReader(&reader);
 	return 0;
