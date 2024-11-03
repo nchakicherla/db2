@@ -4,6 +4,6 @@
 #include <inttypes.h>
 #include "int_typedefs.h"
 
-#include "field_type.h"
+#include "ft_enum.h"
 
 #endif // DB_H

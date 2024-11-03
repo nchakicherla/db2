@@ -1,5 +1,5 @@
-#ifndef FIELD_TYPES_H
-#define FIELD_TYPES_H
+#ifndef FT_ENUM_H
+#define FT_ENUM_H
 
 typedef enum {
 	FT_TEXT,
@@ -29,4 +29,4 @@ typedef enum {
 	FT_ERR
 } FieldType;
 
-#endif // FIELD_TYPES_H
+#endif // FT_ENUM_H
