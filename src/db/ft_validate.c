@@ -5,7 +5,12 @@
 #include <inttypes.h>
 #include <stdlib.h>
 
+#define ALLOW_BLANK_TEXT false
+
 bool FTValidateTEXT(char *field) {
+	if(strlen(field) == 0 && !ALLOW_BLANK_TEXT) {
+		return false;
+	}
 	return true;
 }
 bool FTValidateCHAR(char *field) {
