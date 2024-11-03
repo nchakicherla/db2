@@ -15,13 +15,14 @@ OBJS =  	./obj/db/db.o \
 			./obj/db/csv_reader.o \
 			./obj/db/ft_labels.o \
 			./obj/db/ft_validate.o \
+			./obj/db/datetime.o
 
 LIBOBJS =   ./obj/lib/m_arena.o \
 			./obj/lib/table.o \
 			./obj/lib/file.o \
 			./obj/lib/string_helper.o \
 
-default: reset $(BIN)
+default: $(BIN)
 ifeq ($(OS),Darwin) 
 	$(BIN)
 else 

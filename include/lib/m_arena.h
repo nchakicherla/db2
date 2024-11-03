@@ -24,23 +24,14 @@ typedef struct s_Block {
 } Block;
 
 int initArena(Arena *pool);
-
 int resetArena(Arena *pool);
-
 int termArena(Arena *pool);
-
 void *palloc(Arena *pool, size_t size);
-
 void *pzalloc(Arena *pool, size_t size);
-
 void *pGrowAlloc(void *ptr, size_t old_size, size_t new_size, Arena *pool);
-
 char *pNewStr(char *str, Arena *pool);
-
 size_t getBytesUsed(Arena *pool);
-
 size_t getBytesAllocd(Arena *pool);
-
 void printPoolInfo(Arena *pool);
 
 #endif // MEMPOOL_H

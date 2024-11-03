@@ -183,8 +183,14 @@ bool FTValidateBOOLEAN(char *field) {
 	}
 
 	char buffer[8] = {0};
+	char *start_ptr = field;
+
+	while(*start_ptr == ' ' || *start_ptr == '\t') {
+		start_ptr++;
+	}
+
 	for(int i = 0; i < len; i++) {
-		buffer[i] = tolower(field[i]);
+		buffer[i] = tolower(start_ptr[i]);
 	}
 	buffer[len] = '\0';
 
