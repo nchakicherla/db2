@@ -6,7 +6,6 @@
 
 #include <stdbool.h>
 
-
 bool FTValidateTEXT(char *field);
 bool FTValidateCHAR(char *field);
 

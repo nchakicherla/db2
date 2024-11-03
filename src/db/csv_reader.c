@@ -175,8 +175,12 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 			temp_row->cols[i] = pNewStr(split_string[i], &reader->p); // copy strings from temporary scratch Arena onto CSVReader-specific Arena
 			//printf("%s\n", temp_row->cols[i]);
 		}
+		
+		insertRowAtTail(reader, temp_row);
+		
+		//int ret = insertRowAtTail(reader, temp_row);
 		//printRow(temp_row);
-		printf("(%d) insert row %zu\n", insertRowAtTail(reader, temp_row), reader->n_rows);
+		//printf("(%d) insert row %zu\n", ret, reader->n_rows);
 		//printf("n_rows: %zu\n", reader->n_rows);
 
 		if(*end == '\0') {
@@ -203,7 +207,7 @@ int setDelim(CSVReader *reader, char delim) {
 
 void printRow(CSVRow *row) {
 	if(!row) {
-		printf("(none)\n");
+		printf("None\n");
 		return;
 	}
 	for(size_t i = 0; i < row->n_cols; i++) {

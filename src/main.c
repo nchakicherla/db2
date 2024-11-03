@@ -61,6 +61,7 @@ int main(void) {
 
 	printf("(%d) re-try csv read\n", tryCSVRead(&reader, "./resources/csv/ttc_dataset.csv"));
 	res_good = getRowAtIndex(&reader, 1);
+	
 	printf("n columns: %zu\n", res_good->n_cols);
 
 	bool validation = false;

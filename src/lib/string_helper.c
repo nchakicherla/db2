@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define DEF_STRING_ARRAY_CAP 8
+
 struct s_StringArray {
 	size_t used;
 	size_t cap;
@@ -61,8 +63,8 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 	}
 
 	struct s_StringArray helper = {0, 0, NULL};
-	helper.strs = pzalloc(scratch, 8 * sizeof(char *));
-	helper.cap = 8;
+	helper.strs = pzalloc(scratch, DEF_STRING_ARRAY_CAP * sizeof(char *));
+	helper.cap = DEF_STRING_ARRAY_CAP;
 	//printf("%p\n", (void *)&helper);
 
 	size_t n_toks = 1;

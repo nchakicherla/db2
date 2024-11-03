@@ -5,7 +5,7 @@
 #include <inttypes.h>
 #include <stdlib.h>
 
-#define ALLOW_BLANK_TEXT false
+#define ALLOW_BLANK_TEXT true
 
 bool FTValidateTEXT(char *field) {
 	if(strlen(field) == 0 && !ALLOW_BLANK_TEXT) {
@@ -255,7 +255,6 @@ bool FTValidateRow(CSVRow *row, FieldType *schema) {
 				stat = FTValidateINT64(row->cols[i]);
 				break;
 			}
-
 			case FT_U8: {
 				stat = FTValidateUINT8(row->cols[i]);
 				break;
@@ -272,7 +271,6 @@ bool FTValidateRow(CSVRow *row, FieldType *schema) {
 				stat = FTValidateUINT64(row->cols[i]);
 				break;
 			}
-
 			case FT_FLOAT: {
 				stat = FTValidateFLOAT(row->cols[i]);
 				break;
@@ -281,12 +279,10 @@ bool FTValidateRow(CSVRow *row, FieldType *schema) {
 				stat = FTValidateDOUBLE(row->cols[i]);
 				break;
 			}
-
 			case FT_BOOLEAN: {
 				stat = FTValidateBOOLEAN(row->cols[i]);
 				break;
 			}
-
 			case FT_DATE: {
 				stat = FTValidateDATE(row->cols[i]);
 				break;
@@ -299,17 +295,14 @@ bool FTValidateRow(CSVRow *row, FieldType *schema) {
 				stat = FTValidateDATETIME(row->cols[i]);
 				break;
 			}
-
 			case FT_BLOB: {
 				stat = FTValidateBLOB(row->cols[i]);
 				break;
 			}
-
 			case FT_UUID: {
 				stat = FTValidateUUID(row->cols[i]);
 				break;
 			}
-
 			case FT_ERR:
 			default:
 				stat = false;
