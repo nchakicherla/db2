@@ -1,34 +1,40 @@
 #ifndef FT_VALIDATE_H
 #define FT_VALIDATE_H
 
+#include "./ft_enum.h"
+#include "./csv_reader.h"
+
 #include <stdbool.h>
 
-bool ft_validate_TEXT(char *field);
-bool ft_validate_CHAR(char *field);
 
-bool ft_validate_INT8(char *field);
-bool ft_validate_INT16(char *field);
-bool ft_validate_INT32(char *field);
-bool ft_validate_INT64(char *field);
+bool FTValidateTEXT(char *field);
+bool FTValidateCHAR(char *field);
 
-bool ft_validate_UINT8(char *field);
-bool ft_validate_UINT16(char *field);
-bool ft_validate_UINT32(char *field);
-bool ft_validate_UINT64(char *field);
+bool FTValidateINT8(char *field);
+bool FTValidateINT16(char *field);
+bool FTValidateINT32(char *field);
+bool FTValidateINT64(char *field);
 
-bool ft_validate_FLOAT(char *field);
-bool ft_validate_DOUBLE(char *field);
+bool FTValidateUINT8(char *field);
+bool FTValidateUINT16(char *field);
+bool FTValidateUINT32(char *field);
+bool FTValidateUINT64(char *field);
 
-bool ft_validate_BOOLEAN(char *field);
+bool FTValidateFLOAT(char *field);
+bool FTValidateDOUBLE(char *field);
 
-bool ft_validate_DATE(char *field);
-bool ft_validate_TIME(char *field);
-bool ft_validate_DATETIME(char *field);
+bool FTValidateBOOLEAN(char *field);
 
-bool ft_validate_BLOB(char *field);
+bool FTValidateDATE(char *field);
+bool FTValidateTIME(char *field);
+bool FTValidateDATETIME(char *field);
 
-bool ft_validate_UUID(char *field);
+bool FTValidateBLOB(char *field);
 
-// bool ft_validate_ERR(char *field);
+bool FTValidateUUID(char *field);
+
+// bool FTValidateERR(char *field);
+
+bool FTValidateRow(CSVRow *row, FieldType *schema);
 
 #endif // FT_VALIDATE_H

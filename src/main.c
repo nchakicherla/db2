@@ -6,8 +6,33 @@
 #include "../include/db/db.h"
 #include "../include/db/csv_reader.h"
 
+#include "../include/db/ft_enum.h"
 #include "../include/db/ft_labels.h"
 #include "../include/db/ft_validate.h"
+
+FieldType test_schema[26] = {
+	FT_TEXT,
+	FT_TEXT,
+	FT_TEXT,
+	FT_TEXT,
+	FT_TEXT,
+
+	FT_TEXT,
+	FT_U8,
+	FT_BOOLEAN,
+	FT_FLOAT,
+	FT_FLOAT,
+	FT_TEXT,
+	FT_FLOAT,
+	FT_TEXT,
+	FT_FLOAT,
+	FT_FLOAT,
+
+	FT_DOUBLE,
+	FT_FLOAT,
+	FT_FLOAT,
+	FT_FLOAT
+};
 
 int main(void) {
 
@@ -24,7 +49,17 @@ int main(void) {
 	CSVRow *res_bad = getRowAtIndex(&reader, 235);
 	printRow(res_bad);
 
-	
+	printf("(%d) re-try csv read\n", tryCSVRead(&reader, "./resources/csv/ttc_dataset.csv"));
+	res_good = getRowAtIndex(&reader, 235);
+	printf("n columns: %zu\n", res_good->n_cols);
+
+	bool validation = FTValidateRow(res_good, test_schema);
+	if(validation) {
+		printf("passed!\n");
+	}
+	if(!validation) {
+		printf("failed!\n");
+	}
 
 	termCSVReader(&reader);
 	return 0;
