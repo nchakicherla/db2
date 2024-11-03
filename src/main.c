@@ -11,7 +11,7 @@ int main(void) {
 	CSVReader reader;
 	initCSVReader(&reader);
 
-	int ret = tryCSVRead(&reader, "./resources/csv/test.csv");
+	int ret = tryCSVRead(&reader, "./resources/csv/ttc_dataset.csv");
 	if (ret == 0) {
 		//printf("%s\n", reader.text);
 	}

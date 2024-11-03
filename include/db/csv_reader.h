@@ -28,6 +28,8 @@ int resetCSVReader(CSVReader *reader);
 
 int termCSVReader(CSVReader *reader);
 
+int insertRowAtEnd(CSVReader *reader, CSVRow *row);
+
 int tryCSVRead(CSVReader *reader, const char *filename);
 
 int tryBuildRow(CSVRow *row, char *unsplit, Arena *p);

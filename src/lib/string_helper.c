@@ -45,13 +45,13 @@ bool subNStrMatch(char *search, char *find, size_t n) {
 
 char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins, char *safety_ends, Arena *scratch, size_t *n_toks_out) {
 
-	printf("TEST: %s\n", input);
+	///printf("TEST: %s\n", input);
 
 	size_t delim_len = strlen(delim);
 	size_t safety_begins_len = strlen(safety_begins);
 	size_t safety_ends_len = strlen(safety_ends);
 
-	printf("delim_len: %zu\n", delim_len);
+	///printf("delim_len: %zu\n", delim_len);
 
 	if(safety_begins_len != safety_ends_len) {
 		return NULL;
@@ -86,7 +86,7 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 		//printf("i: %zu, c: %c\n", i, input[i]);
 		if(priv_checkAllMatch(in_safety, safety_begins_len, false)) {
 			if(subNStrMatch(&input[i], delim, delim_len)) {
-				printf("substr match!\n");
+				//printf("substr match!\n");
 				//tok_end++;
 				//tok_end = &input[i];
 
@@ -96,25 +96,25 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 					temp_token[w] = *(tok_start + w);
 				}
 				temp_token[tok_len] = '\0';
-				printf("temp_token: %s\n", temp_token);
-				printf("tok_len: %zu\n", tok_len);
+				//printf("temp_token: %s\n", temp_token);
+				//printf("tok_len: %zu\n", tok_len);
 
 				//helper.strs[n_toks - 1] = palloc(scratch, tok_len + 1);
-				printf("here9\n");
+				//printf("here9\n");
 				if(helper.used == helper.cap) {
 					//size_t old_cap = helper.cap;
 					priv_growStringArray(&helper, scratch);
 				}
 				helper.strs[n_toks - 1] = pNewStr(temp_token, scratch);
 				helper.used++;
-				printf("strs[i]: %s\n", helper.strs[n_toks - 1]);
+				//printf("strs[i]: %s\n", helper.strs[n_toks - 1]);
 
 				tok_start = &input[i + 1];
 				tok_end = &input[i];
 				
 				i += delim_len - 1;
 				
-				printf("tok_start: %c\n", *tok_start);
+				//printf("tok_start: %c\n", *tok_start);
 				n_toks++;
 				//continue;
 			}
@@ -137,7 +137,7 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 		temp_token[i] = tok_start[i];
 	}
 	temp_token[tok_len] = '\0';
-	printf("%s\n", temp_token);
+	//printf("%s\n", temp_token);
 
 	if(helper.used == helper.cap) {
 		priv_growStringArray(&helper, scratch);
@@ -146,13 +146,13 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 	helper.used++;
 
 	*n_toks_out = n_toks;
-	printf("n_toks: %zu\n", n_toks);
-
+	//printf("n_toks: %zu\n", n_toks);
+/*
 	for(size_t z = 0; z < n_toks; z++) {
 		//printf("in loop\n");
 		//printf("%s\n", helper.strs[z]);
 		printf("%zu: %p\n", z, (void *)helper.strs[z]);
 	}
-
+*/
 	return helper.strs;
 }
