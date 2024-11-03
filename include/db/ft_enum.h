@@ -20,6 +20,7 @@ typedef enum {
 	FT_BOOLEAN,
 
 	FT_DATE,
+	FT_TIME,
 	FT_DATETIME,
 
 	FT_BLOB,
