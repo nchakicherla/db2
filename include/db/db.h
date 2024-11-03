@@ -2,7 +2,7 @@
 #define DB_H
 
 #include <inttypes.h>
-#include "redef_int_types.h"
+#include "int_typedefs.h"
 
 #include "field_type.h"
 
