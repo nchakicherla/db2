@@ -15,7 +15,7 @@ int main(void) {
 
 	size_t counter = 1;
 	for (size_t i = 100; i < 110; i++) {
-		//printf("(%p) get row at %zu\n", (void *)getRowAtIndex(&reader, i), i);
+		printf("(%p) get row at %zu\n", (void *)getRowAtIndex(&reader, i), i);
 		//printf("(%d) remove row at %zu\n", removeRowAtIndex(&reader, i), i);
 		counter++;
 	}

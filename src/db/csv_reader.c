@@ -79,8 +79,8 @@ CSVRow *getRowAtIndex(CSVReader *reader, size_t index) {
 		return curr;
 	}
 	curr = reader->head;
+	counter = 0;
 	while(counter != index) {
-	printf("here\n");
 		curr = curr->next;
 		counter++;
 	}
@@ -106,6 +106,7 @@ int removeRowAtIndex(CSVReader *reader, size_t index) {
 	}
 	else if (index <= n / 2) {
 		curr = reader->head;
+		counter = 0;
 		while(counter != index) {
 			curr = curr->next;
 			counter++;
