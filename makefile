@@ -16,7 +16,7 @@ OBJS =  	./obj/db/db.o \
 			./obj/db/ft_labels.o \
 			./obj/db/ft_validate.o \
 
-LIBOBJS =   ./obj/lib/mempool.o \
+LIBOBJS =   ./obj/lib/m_arena.o \
 			./obj/lib/table.o \
 			./obj/lib/file.o \
 			./obj/lib/string_helper.o \
@@ -51,7 +51,9 @@ $(BIN): $(LIBOBJS) $(OBJS) $(MAIN)
 clear: clear-bin clear-obj
 
 clear-bin:
-	-rm ./bin/*
+	-rm ./bin/*.run
 
 clear-obj:
-	-rm ./obj/*
+	-rm ./obj/*.o
+	-rm ./obj/lib/*.o
+	-rm ./obj/db/*.o
