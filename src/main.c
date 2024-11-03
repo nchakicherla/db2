@@ -7,6 +7,7 @@
 #include "../include/db/csv_reader.h"
 
 #include "../include/db/ft_labels.h"
+#include "../include/db/ft_validate.h"
 
 int main(void) {
 
@@ -15,14 +16,17 @@ int main(void) {
 
 	printf("(%d) try csv read\n", tryCSVRead(&reader, "./resources/csv/ttc_dataset.csv"));
 	printf("(%p) get row at %zu\n", (void *)getRowAtIndex(&reader, 235), (size_t)235);
-	printRow(getRowAtIndex(&reader, 235));
+	
+	CSVRow *res_good = getRowAtIndex(&reader, 235);
+	printRow(res_good);
 
 	printf("(%d) try reset csv\n", resetCSVReader(&reader));
-	printRow(getRowAtIndex(&reader, 235));
+	CSVRow *res_bad = getRowAtIndex(&reader, 235);
+	printRow(res_bad);
+
+	
 
 	termCSVReader(&reader);
-
-	printf("test labels: %s\n", getFieldTypeLabel(0));
 	return 0;
 }
 
