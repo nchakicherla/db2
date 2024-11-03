@@ -169,6 +169,7 @@ char *pNewStr(char *str, Arena *pool) {
 		output[i] = str[i];
 	}
 	output[len] = '\0';
+	printf("in pnew: %s\n", output);
 	return output;
 }
 

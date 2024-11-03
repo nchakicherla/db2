@@ -64,6 +64,7 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 		char delim_str[2] = {reader->delim, '\0'};
 
 		char **split_string = tryStringSplit(temp_line, end - start, delim_str, "\"[", "\"]", &scratch, &n_tok);
+		printf("out of split_string\n");
 		if(split_string) {
 			printf("%p\n", (void *)split_string);
 		}

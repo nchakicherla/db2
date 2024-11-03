@@ -12,11 +12,15 @@ struct s_StringArray {
 
 static int priv_growStringArray(struct s_StringArray *arr, Arena *scratch) {
 	char **new_ptr = NULL;
-	if(!(new_ptr = pGrowAlloc(arr->strs, arr->cap, 2 * arr->cap, scratch))) {
+	size_t old_cap = arr->cap;
+	if(!(new_ptr = pGrowAlloc(arr->strs, old_cap * sizeof(char *), 2 * old_cap * sizeof(char *), scratch))) {
 		return 1;
 	}
+	for(size_t i = old_cap; i < 2 * old_cap; i++) {
+		new_ptr[i] = NULL;
+	}
 	arr->strs = new_ptr;
-	arr->cap = 2 * arr->cap;
+	arr->cap = 2 * old_cap;
 	return 0;
 }
 
@@ -41,9 +45,13 @@ bool subNStrMatch(char *search, char *find, size_t n) {
 
 char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins, char *safety_ends, Arena *scratch, size_t *n_toks_out) {
 
+	printf("TEST: %s\n", input);
+
 	size_t delim_len = strlen(delim);
 	size_t safety_begins_len = strlen(safety_begins);
 	size_t safety_ends_len = strlen(safety_ends);
+
+	printf("delim_len: %zu\n", delim_len);
 
 	if(safety_begins_len != safety_ends_len) {
 		return NULL;
@@ -68,13 +76,19 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 		in_safety[i] = false;
 	}
 
-	for(size_t i = 0; i < len - delim_len; i++) {
-		//printf("%c", input[i]);
+	for(size_t i = 0; i < len - (delim_len - 1); i++) {
+		/*
+		printf("ITER: %zu\n", i);
+		for(size_t t = 0; t < n_toks - 1; t++) {
+			printf("ptr %zu: %p\n", t, (void *)helper.strs[t]);
+		}
+		*/
+		//printf("i: %zu, c: %c\n", i, input[i]);
 		if(priv_checkAllMatch(in_safety, safety_begins_len, false)) {
 			if(subNStrMatch(&input[i], delim, delim_len)) {
-
+				printf("substr match!\n");
 				//tok_end++;
-				tok_end = &input[i];
+				//tok_end = &input[i];
 
 				size_t tok_len = tok_end - tok_start;
 				temp_token = palloc(scratch, tok_len + 1);
@@ -82,19 +96,25 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 					temp_token[w] = *(tok_start + w);
 				}
 				temp_token[tok_len] = '\0';
-				//printf("%s\n", temp_token);
+				printf("temp_token: %s\n", temp_token);
+				printf("tok_len: %zu\n", tok_len);
 
 				//helper.strs[n_toks - 1] = palloc(scratch, tok_len + 1);
-				printf("here\n");
-				if(n_toks > helper.cap) {
+				printf("here9\n");
+				if(helper.used == helper.cap) {
+					//size_t old_cap = helper.cap;
 					priv_growStringArray(&helper, scratch);
 				}
 				helper.strs[n_toks - 1] = pNewStr(temp_token, scratch);
 				helper.used++;
+				printf("strs[i]: %s\n", helper.strs[n_toks - 1]);
 
-				i += delim_len;
-				tok_start = &input[i];
-				tok_end = tok_start;
+				tok_start = &input[i + 1];
+				tok_end = &input[i];
+				
+				i += delim_len - 1;
+				
+				printf("tok_start: %c\n", *tok_start);
 				n_toks++;
 				//continue;
 			}
@@ -112,25 +132,27 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 		tok_end++;
 	}
 	size_t tok_len = len  - (tok_start - input);
-	temp_token = palloc(scratch, tok_len);
+	temp_token = palloc(scratch, tok_len + 1);
 	for(size_t i = 0; i < tok_len; i++) {
 		temp_token[i] = tok_start[i];
 	}
 	temp_token[tok_len] = '\0';
-	//printf("%s\n", temp_token);
+	printf("%s\n", temp_token);
 
-	if(n_toks >= helper.cap) {
+	if(helper.used == helper.cap) {
 		priv_growStringArray(&helper, scratch);
 	}
 	helper.strs[n_toks - 1] = pNewStr(temp_token, scratch);
 	helper.used++;
 
 	*n_toks_out = n_toks;
-	//printf("n_toks: %zu\n", n_toks);
+	printf("n_toks: %zu\n", n_toks);
 
 	for(size_t z = 0; z < n_toks; z++) {
-		printf("%s\n", helper.strs[z]);
+		//printf("in loop\n");
+		//printf("%s\n", helper.strs[z]);
+		printf("%zu: %p\n", z, (void *)helper.strs[z]);
 	}
 
-	return NULL;
+	return helper.strs;
 }
