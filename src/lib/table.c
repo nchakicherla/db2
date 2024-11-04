@@ -6,7 +6,6 @@
 
 #define DEF_N_BUCKETS 512
 
-// https://bpa.st/4P7Q 
 uint32_t FNV_1a_hash(char *str) {
 
     uint32_t h = 0x811c9dc5u;

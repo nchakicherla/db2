@@ -125,17 +125,7 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 	if(!reader->text) {
 		return 1;
 	}
-/*
-	size_t n_rows = 1;
-	char *it = reader->text;
-	while(*it != '\0') {
-		if(*it == '\n') {
-			n_rows++;
-		}
-		it++;
-	}
-	reader->n_rows = n_rows;
-*/
+
 	Arena scratch;
 	initArena(&scratch);
 
@@ -160,28 +150,16 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 		if(!split_string) {
 			return 2;
 		}
-/*
-		printf("out of split_string\n");
-		if(split_string) {
-			printf("%p\n", (void *)split_string);
-		}
-		printf("%zu ", n_tok);
-*/
+
 		temp_row = palloc(&reader->p, sizeof(CSVRow));
 		temp_row->cols = palloc(&reader->p, n_tok * sizeof(char *));
 		temp_row->n_cols = n_tok;
 
 		for(size_t i = 0; i < n_tok; i++) {
 			temp_row->cols[i] = pNewStr(split_string[i], &reader->p); // copy strings from temporary scratch Arena onto CSVReader-specific Arena
-			//printf("%s\n", temp_row->cols[i]);
 		}
 		
 		insertRowAtTail(reader, temp_row);
-		
-		//int ret = insertRowAtTail(reader, temp_row);
-		//printRow(temp_row);
-		//printf("(%d) insert row %zu\n", ret, reader->n_rows);
-		//printf("n_rows: %zu\n", reader->n_rows);
 
 		if(*end == '\0') {
 			break;

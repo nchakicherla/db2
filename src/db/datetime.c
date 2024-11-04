@@ -36,11 +36,6 @@ void priv_writeCharsAtIdx(char *dest, char *src, int n) {
 }
 
 void initDateTimeFormat(DateTimeFormat *dt_fmt) {
-	/*
-	for(int i = 0; i < DT_FMT_SIZE; i++) {
-		dt_fmt->fmt[i] = '\0';
-	}
-	*/
 	dt_fmt->str[0] = '\0';
 	dt_fmt->flags = 0;
 }
@@ -77,7 +72,6 @@ DateTimeFormat guessFormat(char *string) {
 	struct s_priv_SearchReturn res;
 
 	while(*it != '\0' && (it - string) < DT_FMT_SIZE) {
-		//printf("%c | ", *it);
 		while(!isalpha(*it) && !isdigit(*it) && *it != '\0') {
 			output.str[output_idx] = *it;
 			output_idx++;
@@ -86,7 +80,6 @@ DateTimeFormat guessFormat(char *string) {
 		if(isdigit(*it)) {
 
 			res = priv_findCharInString(it, '-');
-			//printf("res.n: %d\n", res.n);
 			if(res.n == 2) {
 				if(res.locs[0] == 4 && res.locs[1] == 7) { // YEAR-month-day
 					priv_writeCharsAtIdx(&output.str[output_idx], "%Y-%m-%d", 8);
@@ -178,16 +171,4 @@ DateTimeFormat guessFormat(char *string) {
 	}
 	output.str[output_idx] = '\0';
 	return output;
-
-	// iterate through string, adding characters to output when 
-/*
-	struct s_priv_SearchReturn ret = priv_findCharInString(string, '-');
-	if(ret.n > 0) {
-		printf("ret.n: %d\n", ret.n);
-	}
-*/
-	//ret = priv_findCharInString(string, '/');
-	//ret = priv_findCharInString(string, ':');
-
-	//printf("ret.n: %d\n", ret.n);
 }

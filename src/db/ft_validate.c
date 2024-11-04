@@ -223,12 +223,6 @@ bool FTValidateUUID(char *field) {
 	return false;
 }
 
-/*
-bool FTValidateERR(char *field) {
-	return true;	
-}
-*/
-
 bool FTValidateRow(CSVRow *row, FieldType *schema) {
 	if(!schema) {
 		return false;
