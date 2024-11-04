@@ -26,7 +26,7 @@ static int priv_growStringArray(struct s_StringArray *arr, Arena *scratch) {
 	return 0;
 }
 
-static bool priv_checkAllMatch(bool *vals, size_t n, bool check) {
+static bool priv_checkAllMatch(int *vals, size_t n, int check) {
 	for(size_t i = 0; i < n; i++) {
 		if(vals[i] != check) {
 			return false;
@@ -62,14 +62,15 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 	helper.cap = DEF_STRING_ARRAY_CAP;
 
 	size_t n_toks = 1;
-	bool *in_safety = palloc(scratch, safety_begins_len * sizeof(bool));
+	//bool *in_safety = palloc(scratch, safety_begins_len * sizeof(bool));
+	int *in_safety = palloc(scratch, safety_begins_len * sizeof(int));
 	char *tok_start = input;
 	char *tok_end = input;
 
 	char *temp_token = NULL;
 
 	for(size_t i = 0; i < safety_begins_len; i++) {
-		in_safety[i] = false;
+		in_safety[i] = 0;
 	}
 
 	for(size_t i = 0; i < len - (delim_len - 1); i++) {
@@ -100,11 +101,13 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 		// check all start and end safeties char arrays if current char is contained, flip switch if safety is encountered
 		for(int j = 0; j < safety_begins_len; j++) {
 			if(!in_safety[j] && input[i] == safety_begins[j]) {
-				in_safety[j] = true;
+				//in_safety[j] = true;
+				in_safety[j]++;
 				break;
 			}
 			if(in_safety[j] && input[i] == safety_ends[j]) {
-				in_safety[j] = false;
+				//in_safety[j] = false;
+				in_safety[j]--;
 				break;
 			}
 		}

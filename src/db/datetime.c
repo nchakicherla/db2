@@ -87,7 +87,7 @@ DateTimeFormat guessFormat(char *string) {
 					it+= 10;
 					continue;
 				}
-				if(res.locs[0] == 2 && res.locs[1] == 5) { // year-month-day
+				if(res.locs[0] == 2 && res.locs[1] == 5) { // yebar-month-day
 					priv_writeCharsAtIdx(&output.str[output_idx], "%y-%m-%d", 8);
 					output_idx += 8;
 					it+= 8;
@@ -111,7 +111,8 @@ DateTimeFormat guessFormat(char *string) {
 
 			res = priv_findCharInString(it, ':');
 			if(res.n == 2) {
-				if(res.locs[0] == 2 && res.locs[1] == 5) { // 24-hour:minute:second
+				// 24-hour:minute:second
+				if(res.locs[0] == 2 && res.locs[1] == 5) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%H:%M:%S", 8);
 					output_idx += 8;
 					it+= 8;
@@ -119,7 +120,8 @@ DateTimeFormat guessFormat(char *string) {
 				}
 			}
 			if(res.n == 1) {
-				if(res.locs[0] == 2 && !isdigit(*(it + 7))) { // minute:second
+				// minute:second
+				if(res.locs[0] == 2 && !isdigit(*(it + 7))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%M:%S", 5);
 					output_idx += 5;
 					it+= 5;
@@ -152,7 +154,8 @@ DateTimeFormat guessFormat(char *string) {
 				}
 			}
 			if(res.n == 1) {
-				if(res.locs[0] == 2 && !isdigit(*(it + 5))) { // month/day
+				// month/day, also checks whether subsequent char is non-digit
+				if(res.locs[0] == 2 && !isdigit(*(it + 5))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%m/%d", 5);
 					output_idx += 5;
 					it+= 5;
