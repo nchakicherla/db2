@@ -7,13 +7,14 @@
 
 #define ALLOW_BLANK_TEXT true
 
-bool FTValidateTEXT(char *field) {
+bool FTValidateAsTEXT(char *field) {
 	if(strlen(field) == 0 && !ALLOW_BLANK_TEXT) {
 		return false;
 	}
 	return true;
 }
-bool FTValidateCHAR(char *field) {
+
+bool FTValidateAsCHAR(char *field) {
 	size_t len = strlen(field);
 	if(len > 1) {
 		return false;
@@ -27,7 +28,7 @@ bool FTValidateCHAR(char *field) {
 	return false;
 }
 
-bool FTValidateINT8(char *field) {
+bool FTValidateAsI8(char *field) {
 	long long int test;
 	char *end_ptr = field;
 
@@ -44,7 +45,8 @@ bool FTValidateINT8(char *field) {
 	}
 	return true;
 }
-bool FTValidateINT16(char *field) {
+
+bool FTValidateAsI16(char *field) {
 	long long int test;
 	char *end_ptr = field;
 
@@ -61,7 +63,8 @@ bool FTValidateINT16(char *field) {
 	}
 	return true;
 }
-bool FTValidateINT32(char *field) {
+
+bool FTValidateAsI32(char *field) {
 	long long int test;
 	char *end_ptr = field;
 
@@ -78,11 +81,10 @@ bool FTValidateINT32(char *field) {
 	}
 	return true;
 }
-bool FTValidateINT64(char *field) {
-	//long long int test;
+
+bool FTValidateAsI64(char *field) {
 	char *end_ptr = field;
 
-	//test = strtoll(field, &end_ptr, 0);
 	strtoll(field, &end_ptr, 0);
 
 	if(end_ptr == field || *end_ptr != '\0') {
@@ -91,7 +93,7 @@ bool FTValidateINT64(char *field) {
 	return true;
 }
 
-bool FTValidateUINT8(char *field) {
+bool FTValidateAsU8(char *field) {
 	long long int test;
 	char *end_ptr = field;
 
@@ -108,7 +110,8 @@ bool FTValidateUINT8(char *field) {
 	}
 	return true;
 }
-bool FTValidateUINT16(char *field) {
+
+bool FTValidateAsU16(char *field) {
 	long long int test;
 	char *end_ptr = field;
 
@@ -125,7 +128,8 @@ bool FTValidateUINT16(char *field) {
 	}
 	return true;
 }
-bool FTValidateUINT32(char *field) {
+
+bool FTValidateAsU32(char *field) {
 	long long int test;
 	char *end_ptr = field;
 
@@ -142,11 +146,11 @@ bool FTValidateUINT32(char *field) {
 	}
 	return true;
 }
-bool FTValidateUINT64(char *field) {
+
+bool FTValidateAsU64(char *field) {
 	//unsigned long long int test;
 	char *end_ptr = field;
 
-	//test = strtoull(field, &end_ptr, 0);
 	strtoull(field, &end_ptr, 0);
 
 	if(end_ptr == field || *end_ptr != '\0') {
@@ -155,7 +159,7 @@ bool FTValidateUINT64(char *field) {
 	return true;
 }
 
-bool FTValidateFLOAT(char *field) {
+bool FTValidateAsFLOAT(char *field) {
 	char *end_ptr = field;
 
 	strtof(field, &end_ptr);
@@ -165,7 +169,8 @@ bool FTValidateFLOAT(char *field) {
 	}
 	return true;
 }
-bool FTValidateDOUBLE(char *field) {
+
+bool FTValidateAsDOUBLE(char *field) {
 	char *end_ptr = field;
 
 	strtod(field, &end_ptr);
@@ -176,7 +181,7 @@ bool FTValidateDOUBLE(char *field) {
 	return true;
 }
 
-bool FTValidateBOOLEAN(char *field) {
+bool FTValidateAsBOOLEAN(char *field) {
 	size_t len = strlen(field);
 	if(len < 4 || len > 5) {
 		return false;
@@ -194,32 +199,38 @@ bool FTValidateBOOLEAN(char *field) {
 	}
 	buffer[len] = '\0';
 
-	int res = strncmp(buffer, "true", 4);
-	if(res == 0) {
+	if(0 == strncmp(buffer, "true", 4)) {
 		return true;
 	}
-	res = strncmp(buffer, "false", 5);
-	if(res == 0) {
+	if(0 == strncmp(buffer, "false", 5)) {
+		return true;
+	}
+	if(0 == strncmp(buffer, "1", 1)) {
+		return true;
+	}
+	if(0 == strncmp(buffer, "0", 1)) {
 		return true;
 	}
 	return false;
 }
 
-bool FTValidateDATE(char *field) {
-	return false;
-}
-bool FTValidateTIME(char *field) {
-	return false;
-}
-bool FTValidateDATETIME(char *field) {
+bool FTValidateAsDATE(char *field) {
 	return false;
 }
 
-bool FTValidateBLOB(char *field) {
+bool FTValidateAsTIME(char *field) {
 	return false;
 }
 
-bool FTValidateUUID(char *field) {
+bool FTValidateAsDATETIME(char *field) {
+	return false;
+}
+
+bool FTValidateAsBLOB(char *field) {
+	return false;
+}
+
+bool FTValidateAsUUID(char *field) {
 	return false;
 }
 
@@ -230,86 +241,92 @@ bool FTValidateRow(CSVRow *row, FieldType *schema) {
 
 	bool stat = false;
 	for(size_t i = 0; i < row->n_cols; i++) {
-		switch(schema[i]) {
-			case FT_TEXT: {
-				stat = FTValidateTEXT(row->cols[i]);
-				break;
-			}
-			case FT_CHAR: {
-				stat = FTValidateCHAR(row->cols[i]);
-				break;
-			}
-			case FT_I8: {
-				stat = FTValidateINT8(row->cols[i]);
-				break;
-			}
-			case FT_I16: {
-				stat = FTValidateINT16(row->cols[i]);
-				break;
-			}
-			case FT_I32: {
-				stat = FTValidateINT32(row->cols[i]);
-				break;
-			}
-			case FT_I64: {
-				stat = FTValidateINT64(row->cols[i]);
-				break;
-			}
-			case FT_U8: {
-				stat = FTValidateUINT8(row->cols[i]);
-				break;
-			}
-			case FT_U16: {
-				stat = FTValidateUINT16(row->cols[i]);
-				break;
-			}
-			case FT_U32: {
-				stat = FTValidateUINT32(row->cols[i]);
-				break;
-			}
-			case FT_U64: {
-				stat = FTValidateUINT64(row->cols[i]);
-				break;
-			}
-			case FT_FLOAT: {
-				stat = FTValidateFLOAT(row->cols[i]);
-				break;
-			}
-			case FT_DOUBLE: {
-				stat = FTValidateDOUBLE(row->cols[i]);
-				break;
-			}
-			case FT_BOOLEAN: {
-				stat = FTValidateBOOLEAN(row->cols[i]);
-				break;
-			}
-			case FT_DATE: {
-				stat = FTValidateDATE(row->cols[i]);
-				break;
-			}
-			case FT_TIME: {
-				stat = FTValidateTIME(row->cols[i]);
-				break;
-			}
-			case FT_DATETIME: {
-				stat = FTValidateDATETIME(row->cols[i]);
-				break;
-			}
-			case FT_BLOB: {
-				stat = FTValidateBLOB(row->cols[i]);
-				break;
-			}
-			case FT_UUID: {
-				stat = FTValidateUUID(row->cols[i]);
-				break;
-			}
-			case FT_ERR:
-			default:
-				stat = false;
-		}
+		stat = FTValidateAsType(row->cols[i], schema[i]);
 		if(stat == false) {
 			return false;
 		}
 	}
 	return true;
+}
+
+bool FTValidateAsType(char *field, FieldType type) {
+	bool stat = true;
+	switch(type) {
+		case FT_TEXT: {
+			stat = FTValidateAsTEXT(field);
+			break;
+		}
+		case FT_CHAR: {
+			stat = FTValidateAsCHAR(field);
+			break;
+		}
+		case FT_I8: {
+			stat = FTValidateAsI8(field);
+			break;
+		}
+		case FT_I16: {
+			stat = FTValidateAsI16(field);
+			break;
+		}
+		case FT_I32: {
+			stat = FTValidateAsI32(field);
+			break;
+		}
+		case FT_I64: {
+			stat = FTValidateAsI64(field);
+			break;
+		}
+		case FT_U8: {
+			stat = FTValidateAsU8(field);
+			break;
+		}
+		case FT_U16: {
+			stat = FTValidateAsU16(field);
+			break;
+		}
+		case FT_U32: {
+			stat = FTValidateAsU32(field);
+			break;
+		}
+		case FT_U64: {
+			stat = FTValidateAsU64(field);
+			break;
+		}
+		case FT_FLOAT: {
+			stat = FTValidateAsFLOAT(field);
+			break;
+		}
+		case FT_DOUBLE: {
+			stat = FTValidateAsDOUBLE(field);
+			break;
+		}
+		case FT_BOOLEAN: {
+			stat = FTValidateAsBOOLEAN(field);
+			break;
+		}
+		case FT_DATE: {
+			stat = FTValidateAsDATE(field);
+			break;
+		}
+		case FT_TIME: {
+			stat = FTValidateAsTIME(field);
+			break;
+		}
+		case FT_DATETIME: {
+			stat = FTValidateAsDATETIME(field);
+			break;
+		}
+		case FT_BLOB: {
+			stat = FTValidateAsBLOB(field);
+			break;
+		}
+		case FT_UUID: {
+			stat = FTValidateAsUUID(field);
+			break;
+		}
+		case FT_ERR:
+		default:
+			stat = false;
+	}
+	return stat;
 }

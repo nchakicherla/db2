@@ -6,34 +6,33 @@
 
 #include <stdbool.h>
 
-bool FTValidateTEXT(char *field);
-bool FTValidateCHAR(char *field);
+bool FTValidateAsTEXT(char *field);
+bool FTValidateAsCHAR(char *field);
 
-bool FTValidateINT8(char *field);
-bool FTValidateINT16(char *field);
-bool FTValidateINT32(char *field);
-bool FTValidateINT64(char *field);
+bool FTValidateAsI8(char *field);
+bool FTValidateAsI16(char *field);
+bool FTValidateAsI32(char *field);
+bool FTValidateAsI64(char *field);
 
-bool FTValidateUINT8(char *field);
-bool FTValidateUINT16(char *field);
-bool FTValidateUINT32(char *field);
-bool FTValidateUINT64(char *field);
+bool FTValidateAsU8(char *field);
+bool FTValidateAsU16(char *field);
+bool FTValidateAsU32(char *field);
+bool FTValidateAsU64(char *field);
 
-bool FTValidateFLOAT(char *field);
-bool FTValidateDOUBLE(char *field);
+bool FTValidateAsFLOAT(char *field);
+bool FTValidateAsDOUBLE(char *field);
 
-bool FTValidateBOOLEAN(char *field);
+bool FTValidateAsBOOLEAN(char *field);
 
-bool FTValidateDATE(char *field);
-bool FTValidateTIME(char *field);
-bool FTValidateDATETIME(char *field);
+bool FTValidateAsDATE(char *field);
+bool FTValidateAsTIME(char *field);
+bool FTValidateAsDATETIME(char *field);
 
-bool FTValidateBLOB(char *field);
+bool FTValidateAsBLOB(char *field);
 
-bool FTValidateUUID(char *field);
-
-// bool FTValidateERR(char *field);
+bool FTValidateAsUUID(char *field);
 
 bool FTValidateRow(CSVRow *row, FieldType *schema);
+bool FTValidateAsType(char *field, FieldType type);
 
 #endif // FT_VALIDATE_H

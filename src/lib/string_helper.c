@@ -90,7 +90,7 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 				helper.strs[n_toks - 1] = pNewStr(temp_token, scratch);
 				helper.used++;
 
-				tok_start = &input[i + 1];
+				tok_start = &input[i + delim_len];
 				tok_end = &input[i];
 				
 				i += delim_len - 1;
