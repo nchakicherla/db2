@@ -121,6 +121,7 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 				//continue;
 			}
 		}
+		// check all start and end safeties char arrays if current char is contained, flip switch if safety is encountered
 		for(int j = 0; j < safety_begins_len; j++) {
 			if(!in_safety[j] && input[i] == safety_begins[j]) {
 				in_safety[j] = true;

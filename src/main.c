@@ -68,16 +68,18 @@ int main(void) {
 	printRow(res_good);
 	validation = FTValidateRow(res_good, test_schema);
 	if(validation) {
-		printf("passed!\n");
+		printf("validation passed!\n");
 	}
 	if(!validation) {
-		printf("failed!\n");
+		printf("validation failed!\n");
 	}
 
 	DateTimeFormat fmt;
 	initDateTimeFormat(&fmt);
 
-	fmt = guessFormat("03:30:03");
+	char *test_date = "03-01";
+	fmt = guessFormat(test_date);
+	printf("trying guessFormat on \'%s\'\n", test_date);
 	printf("fmt.str: %s\n", fmt.str);
 
 	termCSVReader(&reader);

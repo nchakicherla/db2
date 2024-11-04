@@ -3,7 +3,7 @@
 #include "../../include/lib/m_arena.h"
 #include <stdio.h>
 
-#define MEMORY_HOG_FACTOR 60
+#define MEMORY_HOG_FACTOR 8
 #define DEF_BLOCK_INIT_SIZE 512
 /*
 static inline Block *getLastBlock(Arena *pool) {

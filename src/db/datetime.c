@@ -88,25 +88,37 @@ DateTimeFormat guessFormat(char *string) {
 			res = priv_findCharInString(it, '-');
 			//printf("res.n: %d\n", res.n);
 			if(res.n == 2) {
-				if(res.locs[0] == 4 && res.locs[1] == 7) {
+				if(res.locs[0] == 4 && res.locs[1] == 7) { // YEAR-month-day
 					priv_writeCharsAtIdx(&output.str[output_idx], "%Y-%m-%d", 8);
 					output_idx += 8;
 					it+= 10;
 					continue;
 				}
+				if(res.locs[0] == 2 && res.locs[1] == 5) { // year-month-day
+					priv_writeCharsAtIdx(&output.str[output_idx], "%y-%m-%d", 8);
+					output_idx += 8;
+					it+= 8;
+					continue;
+				}
 			}
 			if(res.n == 1) {
-				if(res.locs[0] == 4 && !isdigit(*(it + 7))) {
+				if(res.locs[0] == 4 && !isdigit(*(it + 7))) { // YEAR-month
 					priv_writeCharsAtIdx(&output.str[output_idx], "%Y-%m", 5);
 					output_idx += 5;
 					it+= 7;
 					continue;
 				}
+				if(res.locs[0] == 2 && !isdigit(*(it + 5))) { // month-day
+					priv_writeCharsAtIdx(&output.str[output_idx], "%m-%d", 5);
+					output_idx += 5;
+					it+= 5;
+					continue;
+				}				
 			}
 
 			res = priv_findCharInString(it, ':');
 			if(res.n == 2) {
-				if(res.locs[0] == 2 && res.locs[1] == 5) {
+				if(res.locs[0] == 2 && res.locs[1] == 5) { // 24-hour:minute:second
 					priv_writeCharsAtIdx(&output.str[output_idx], "%H:%M:%S", 8);
 					output_idx += 8;
 					it+= 8;
@@ -114,8 +126,41 @@ DateTimeFormat guessFormat(char *string) {
 				}
 			}
 			if(res.n == 1) {
-				if(res.locs[0] == 2 && !isdigit(*(it + 7))) {
-					priv_writeCharsAtIdx(&output.str[output_idx], "%M-%S", 5);
+				if(res.locs[0] == 2 && !isdigit(*(it + 7))) { // minute:second
+					priv_writeCharsAtIdx(&output.str[output_idx], "%M:%S", 5);
+					output_idx += 5;
+					it+= 5;
+					continue;
+				}
+			}
+
+			res = priv_findCharInString(it, '/');
+			if(res.n == 2) {
+				// YEAR/month/day
+				if(res.locs[0] == 4 && res.locs[1] == 7) {
+					priv_writeCharsAtIdx(&output.str[output_idx], "%Y/%m/%d", 8);
+					output_idx += 8;
+					it+= 10;
+					continue;
+				}
+				// day/month/YEAR
+				if(res.locs[0] == 2 && res.locs[1] == 5 && isdigit(*(it + 8)) && isdigit(*(it + 9))) {
+					priv_writeCharsAtIdx(&output.str[output_idx], "%d/%m/%y", 8);
+					output_idx += 8;
+					it+= 10;
+					continue;
+				}
+				// day/month/year
+				if(res.locs[0] == 2 && res.locs[1] == 5 && !isdigit(*(it + 8))) {
+					priv_writeCharsAtIdx(&output.str[output_idx], "%d/%m/%y", 8);
+					output_idx += 8;
+					it+= 10;
+					continue;
+				}
+			}
+			if(res.n == 1) {
+				if(res.locs[0] == 2 && !isdigit(*(it + 5))) { // month/day
+					priv_writeCharsAtIdx(&output.str[output_idx], "%m/%d", 5);
 					output_idx += 5;
 					it+= 5;
 					continue;
