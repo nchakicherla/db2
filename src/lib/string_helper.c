@@ -70,6 +70,7 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 	char *temp_token = NULL;
 
 	for(size_t i = 0; i < safety_begins_len; i++) {
+		//in_safety[i] = false;
 		in_safety[i] = 0;
 	}
 
