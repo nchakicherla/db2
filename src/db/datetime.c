@@ -35,12 +35,27 @@ void priv_writeCharsAtIdx(char *dest, char *src, int n) {
 	}
 }
 
-void initDateTimeFormat(DateTimeFormat *dt_fmt) {
+void initDateTimeFmt(DateTimeFmt *dt_fmt) {
 	dt_fmt->str[0] = '\0';
 	dt_fmt->flags = 0;
 }
 
-int setDateTimeFormat(DateTimeFormat *dt_fmt, char *spec) {
+#define UNSIGNED_DT_MEMBER_INIT 0
+#define SIGNED_DT_MEMBER_INIT -1
+
+void initDateTime(DateTime *dt) {
+	// unsigned
+	dt->month = UNSIGNED_DT_MEMBER_INIT;
+	dt->day = UNSIGNED_DT_MEMBER_INIT;
+	dt->year = UNSIGNED_DT_MEMBER_INIT;
+	// signed
+	dt->hour = SIGNED_DT_MEMBER_INIT;
+	dt->minute = SIGNED_DT_MEMBER_INIT;
+	dt->second = SIGNED_DT_MEMBER_INIT;
+	dt->ctsecond = SIGNED_DT_MEMBER_INIT;
+}
+
+int setDateTimeFmt(DateTimeFmt *dt_fmt, char *spec) {
 	size_t len = strlen(spec);
 	if(len + 1 > DT_FMT_SIZE) {
 		return 1;
@@ -52,16 +67,17 @@ int setDateTimeFormat(DateTimeFormat *dt_fmt, char *spec) {
 	return 0;
 }
 
-void setFlag(DateTimeFormat *dt_fmt, uint8_t flag) {
-	dt_fmt->flags |= flag;
+void setFlag(DateTimeFmt *dt_fmt, uint8_t flag, bool setting) {
+	//dt_fmt->flags |= flag;
+	setting ? (dt_fmt->flags |= flag) : (dt_fmt->flags &= ~flag);
 }
 
-bool checkFlag(DateTimeFormat *dt_fmt, uint8_t flag) {
+bool checkFlag(DateTimeFmt *dt_fmt, uint8_t flag) {
 	return dt_fmt->flags & flag;
 }
 
-DateTimeFormat guessFormat(char *string) {
-	DateTimeFormat output = {0};
+DateTimeFmt guessFormat(char *string) {
+	DateTimeFmt output = {0};
 	size_t len = strlen(string);
 	if(len + 1 > DT_FMT_SIZE) {
 		return output;
@@ -72,7 +88,7 @@ DateTimeFormat guessFormat(char *string) {
 	struct s_priv_SearchReturn res;
 
 	while(*it != '\0' && (it - string) < DT_FMT_SIZE) {
-		while(!isalpha(*it) && !isdigit(*it) && *it != '\0') {
+		while(*it != '\0' && !isalpha(*it) && !isdigit(*it)) {
 			output.str[output_idx] = *it;
 			output_idx++;
 			it++;
@@ -140,7 +156,7 @@ DateTimeFormat guessFormat(char *string) {
 				}
 				// day/month/YEAR
 				if(res.locs[0] == 2 && res.locs[1] == 5 && isdigit(*(it + 8)) && isdigit(*(it + 9))) {
-					priv_writeCharsAtIdx(&output.str[output_idx], "%d/%m/%y", 8);
+					priv_writeCharsAtIdx(&output.str[output_idx], "%d/%m/%Y", 8);
 					output_idx += 8;
 					it+= 10;
 					continue;
@@ -149,7 +165,7 @@ DateTimeFormat guessFormat(char *string) {
 				if(res.locs[0] == 2 && res.locs[1] == 5 && !isdigit(*(it + 8))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%d/%m/%y", 8);
 					output_idx += 8;
-					it+= 10;
+					it+= 8;
 					continue;
 				}
 			}

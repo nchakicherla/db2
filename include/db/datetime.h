@@ -26,25 +26,25 @@ ISO 8601 		"%Y-%m-%d %H:%M:%S"
 %Z 				TIMEZONE // won't implement
 */
 
-typedef struct s_DateTimeFormat {
+typedef struct s_DateTimeFmt {
 	char str[DT_FMT_SIZE];
 	uint8_t flags;
-} DateTimeFormat;
+} DateTimeFmt;
 
 typedef struct s_DateTime {
 	uint8_t month;
 	uint8_t day;
 	uint16_t year;
-	uint8_t hour;
-	uint8_t minute;
-	uint8_t second;
-	uint8_t ctsecond;
+	int8_t hour;
+	int8_t minute;
+	int8_t second;
+	int8_t ctsecond;
 } DateTime;
 
-void initDateTimeFormat(DateTimeFormat *dt_fmt);
-int setDateTimeFormat(DateTimeFormat *dt_fmt, char *spec);
-void setFlag(DateTimeFormat *dt_fmt, uint8_t flag);
-bool checkFlag(DateTimeFormat *dt_fmt, uint8_t flag);
-DateTimeFormat guessFormat(char *string);
+void initDateTimeFmt(DateTimeFmt *dt_fmt);
+int setDateTimeFmt(DateTimeFmt *dt_fmt, char *spec);
+void setFlag(DateTimeFmt *dt_fmt, uint8_t flag, bool setting);
+bool checkFlag(DateTimeFmt *dt_fmt, uint8_t flag);
+DateTimeFmt guessFormat(char *string);
 
 #endif // DATETIME_H

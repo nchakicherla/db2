@@ -62,7 +62,6 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 	helper.cap = DEF_STRING_ARRAY_CAP;
 
 	size_t n_toks = 1;
-	//bool *in_safety = palloc(scratch, safety_begins_len * sizeof(bool));
 	int *in_safety = palloc(scratch, safety_begins_len * sizeof(int));
 	char *tok_start = input;
 	char *tok_end = input;
@@ -70,7 +69,6 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 	char *temp_token = NULL;
 
 	for(size_t i = 0; i < safety_begins_len; i++) {
-		//in_safety[i] = false;
 		in_safety[i] = 0;
 	}
 
@@ -102,12 +100,10 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 		// check all start and end safeties char arrays if current char is contained, flip switch if safety is encountered
 		for(int j = 0; j < safety_begins_len; j++) {
 			if(!in_safety[j] && input[i] == safety_begins[j]) {
-				//in_safety[j] = true;
 				in_safety[j]++;
 				break;
 			}
 			if(in_safety[j] && input[i] == safety_ends[j]) {
-				//in_safety[j] = false;
 				in_safety[j]--;
 				break;
 			}
@@ -115,6 +111,7 @@ char **tryStringSplit(char *input, size_t len, char *delim, char *safety_begins,
 		tok_end++;
 	}
 	size_t tok_len = len  - (tok_start - input);
+	
 	temp_token = palloc(scratch, tok_len + 1);
 	for(size_t i = 0; i < tok_len; i++) {
 		temp_token[i] = tok_start[i];

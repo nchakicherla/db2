@@ -120,7 +120,9 @@ int removeRowAtIndex(CSVReader *reader, size_t index) {
 	return 0;
 }
 
-int tryCSVRead(CSVReader *reader, const char *filename) {
+int tryCSVRead(CSVReader *reader, const char *filename) { // resets CSVReader before reading CSV
+	resetCSVReader(reader);
+
 	reader->text = pReadFile(filename, &(reader->p));
 	if(!reader->text) {
 		return 1;
@@ -136,17 +138,18 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 	CSVRow *temp_row = NULL;
 
 	while(*start != '\0') {
-		while(*end != 0x03 && *end != '\r' && *end != '\n' && *end != '\0') {
+		while((*end != '\0') && (*end != 0x03 && *end != '\r' && *end != '\n')) {
 			end++;
 		}
-		temp_line = palloc(&scratch, (end - start) + 1);
-		memcpy(temp_line, start, end - start);
-		temp_line[end - start] = '\0';
+		size_t line_len = end - start;
+		temp_line = palloc(&scratch, (line_len) + 1);
+		memcpy(temp_line, start, line_len);
+		temp_line[line_len] = '\0';
 
 		size_t n_tok = 0;
 		char delim_str[2] = {reader->delim, '\0'};
 
-		char **split_string = tryStringSplit(temp_line, end - start, delim_str, "\"[", "\"]", &scratch, &n_tok);
+		char **split_string = tryStringSplit(temp_line, line_len, delim_str, "\"[", "\"]", &scratch, &n_tok);
 		if(!split_string) {
 			return 2;
 		}
@@ -164,7 +167,7 @@ int tryCSVRead(CSVReader *reader, const char *filename) {
 		if(*end == '\0') {
 			break;
 		}
-		while(*end == 0x03 || *end == '\r' || *end == '\n' /*|| *end == ' '*/) {
+		while(*end == 0x03 || *end == '\r' || *end == '\n') {/*|| *end == ' '*/
 			end++;
 		}
 		start = end;

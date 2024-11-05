@@ -74,13 +74,17 @@ int main(void) {
 		printf("validation failed!\n");
 	}
 
-	DateTimeFormat fmt;
-	initDateTimeFormat(&fmt);
+	DateTimeFmt fmt;
+	initDateTimeFmt(&fmt);
 
 	char *test_date = "03-01";
 	fmt = guessFormat(test_date);
 	printf("trying guessFormat on \'%s\'\n", test_date);
 	printf("fmt.str: %s\n", fmt.str);
+
+	printf("(%d) re-try csv read\n", tryCSVRead(&reader, "./resources/csv/test.csv"));
+	res_good = getRowAtIndex(&reader, 0);
+	printRow(res_good);
 
 	termCSVReader(&reader);
 	return 0;
