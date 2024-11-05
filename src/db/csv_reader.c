@@ -60,7 +60,7 @@ int insertRowAtHead(CSVReader *reader, CSVRow *row) {
 	return 0;
 }
 
-CSVRow *getRowAtIndex(CSVReader *reader, size_t index) {
+CSVRow *getCSVRowAtIndex(CSVReader *reader, size_t index) {
 	size_t n = reader->n_rows;
 	if(index >= n) {
 		return NULL;

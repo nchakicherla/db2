@@ -32,9 +32,9 @@ typedef struct s_DateTimeFmt {
 } DateTimeFmt;
 
 typedef struct s_DateTime {
+	uint16_t year;
 	uint8_t month;
 	uint8_t day;
-	uint16_t year;
 	int8_t hour;
 	int8_t minute;
 	int8_t second;

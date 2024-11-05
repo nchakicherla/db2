@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-struct s_priv_SearchReturn {
+struct s_priv_SearchReturn { // can store max 8 locations
 	int n;
 	int locs[8];
 };
@@ -29,10 +29,23 @@ struct s_priv_SearchReturn priv_findCharInString(char *str, char c) { // limited
 	return output;
 }
 
-void priv_writeCharsAtIdx(char *dest, char *src, int n) {
+static void priv_writeCharsAtIdx(char *dest, char *src, int n) {
 	for(int i = 0; i < n; i++) {
 		dest[i] = src[i];
 	}
+}
+
+static bool priv_isLeapYear(uint16_t year) {
+	if(year % 4 == 0) {
+		if(year % 100 == 0) {
+			if(year % 400 == 0) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+	return false;
 }
 
 void initDateTimeFmt(DateTimeFmt *dt_fmt) {
@@ -45,15 +58,18 @@ void initDateTimeFmt(DateTimeFmt *dt_fmt) {
 
 void initDateTime(DateTime *dt) {
 	// unsigned
+	dt->year = UNSIGNED_DT_MEMBER_INIT;
 	dt->month = UNSIGNED_DT_MEMBER_INIT;
 	dt->day = UNSIGNED_DT_MEMBER_INIT;
-	dt->year = UNSIGNED_DT_MEMBER_INIT;
 	// signed
 	dt->hour = SIGNED_DT_MEMBER_INIT;
 	dt->minute = SIGNED_DT_MEMBER_INIT;
 	dt->second = SIGNED_DT_MEMBER_INIT;
 	dt->ctsecond = SIGNED_DT_MEMBER_INIT;
 }
+
+#undef UNSIGNED_DT_MEMBER_INIT
+#undef SIGNED_DT_MEMBER_INIT
 
 int setDateTimeFmt(DateTimeFmt *dt_fmt, char *spec) {
 	size_t len = strlen(spec);
@@ -170,7 +186,7 @@ DateTimeFmt guessFormat(char *string) {
 				}
 			}
 			if(res.n == 1) {
-				// month/day, also checks whether subsequent char is non-digit
+				// month/day
 				if(res.locs[0] == 2 && !isdigit(*(it + 5))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%m/%d", 5);
 					output_idx += 5;

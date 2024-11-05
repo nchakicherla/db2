@@ -234,8 +234,11 @@ bool FTValidateAsUUID(char *field) {
 	return false;
 }
 
-bool FTValidateRow(CSVRow *row, FieldType *schema) {
+bool FTValidateRow(CSVRow *row, FieldType *schema, size_t schema_len) {
 	if(!schema) {
+		return false;
+	}
+	if(row->n_cols != schema_len) {
 		return false;
 	}
 
