@@ -84,7 +84,6 @@ int setDateTimeFmt(DateTimeFmt *dt_fmt, char *spec) {
 }
 
 void setDateTimeFmtFlag(DateTimeFmt *dt_fmt, uint8_t flag, bool setting) {
-	//dt_fmt->flags |= flag;
 	setting ? (dt_fmt->flags |= flag) : (dt_fmt->flags &= ~flag);
 }
 
@@ -113,18 +112,27 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 
 			res = priv_findCharInString(it, '-');
 			if(res.n == 2) {
-				if(res.locs[0] == 4 && res.locs[1] == 7) { // YEAR-month-day
+				// YEAR-month-day
+				if(res.locs[0] == 4 && res.locs[1] == 7) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%Y-%m-%d", 8);
 					output_idx += 8;
 					it+= 10;
 					continue;
 				}
-				if(res.locs[0] == 2 && res.locs[1] == 5) { // year-month-day
+				// year-month-day
+				if(res.locs[0] == 2 && res.locs[1] == 5 && !isdigit(*(it + 8)) && !isdigit(*(it + 9))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%y-%m-%d", 8);
 					output_idx += 8;
 					it+= 8;
 					continue;
 				}
+				// month-day-YEAR
+				if(res.locs[0] == 2 && res.locs[1] == 5 && isdigit(*(it + 8)) && isdigit(*(it + 9))) {
+					priv_writeCharsAtIdx(&output.str[output_idx], "%d-%m-%Y", 8);
+					output_idx += 8;
+					it+= 10;
+					continue;
+				}				
 			}
 			if(res.n == 1) {
 				if(res.locs[0] == 4 && !isdigit(*(it + 7))) { // YEAR-month
@@ -209,7 +217,12 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 			for(int i = 0; i < sizeof(SpecifierTablePairs) / sizeof(SpecifierTablePairs[0]); i++) {
 				int j = 0; // i - SpecifierTablePair index, j - index within table
 				while(SpecifierTablePairs[i].table[j] != NULL) {
-					if(0 == strncmp(SpecifierTablePairs[i].table[j], it, keyword_len)) {
+					char tmp[keyword_len + 1];
+					for(size_t i = 0; i < keyword_len; i++) {
+						tmp[i] = tolower(it[i]);
+					}
+					tmp[keyword_len] = '\0';
+					if(0 == strncmp(SpecifierTablePairs[i].table[j], tmp, keyword_len)) {
 						matched_table = i;
 						break;
 					}

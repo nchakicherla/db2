@@ -73,12 +73,11 @@ int main(void) {
 	DateTimeFmt fmt;
 	initDateTimeFmt(&fmt);
 
-	char *test_date = "mon 2019-05-17";
+	char *test_date = "wed 11-06-2024";
 	fmt = guessDateTimeFmt(test_date);
 	printf("trying guessDateTimeFmt on \'%s\'\n", test_date);
 	printf("fmt.str: \'%s\'\n", fmt.str);
 
-	//setCSVDelim(&reader, ';');
 	printf("(%d) re-try csv read\n", tryCSVRead(&reader, "./resources/csv/ttc_dataset.csv"));
 	res_good = getCSVRowAtIndex(&reader, 1);
 	printCSVRow(res_good);
