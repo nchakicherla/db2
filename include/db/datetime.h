@@ -43,8 +43,8 @@ typedef struct s_DateTime {
 
 void initDateTimeFmt(DateTimeFmt *dt_fmt);
 int setDateTimeFmt(DateTimeFmt *dt_fmt, char *spec);
-void setFlag(DateTimeFmt *dt_fmt, uint8_t flag, bool setting);
-bool checkFlag(DateTimeFmt *dt_fmt, uint8_t flag);
-DateTimeFmt guessFormat(char *string);
+void setDateTimeFmtFlag(DateTimeFmt *dt_fmt, uint8_t flag, bool setting);
+bool checkDateTimeFmtFlag(DateTimeFmt *dt_fmt, uint8_t flag);
+DateTimeFmt guessDateTimeFmt(char *string);
 
 #endif // DATETIME_H

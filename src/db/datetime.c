@@ -10,7 +10,7 @@ struct s_priv_SearchReturn { // can store max 8 locations
 	int locs[8];
 };
 
-struct s_priv_SearchReturn priv_findCharInString(char *str, char c) { // limited to 8 max
+static struct s_priv_SearchReturn priv_findCharInString(char *str, char c) { // limited to 8 max
 	struct s_priv_SearchReturn output = {0};
 	size_t len = strlen(str);
 	if(len == 0) {
@@ -83,16 +83,16 @@ int setDateTimeFmt(DateTimeFmt *dt_fmt, char *spec) {
 	return 0;
 }
 
-void setFlag(DateTimeFmt *dt_fmt, uint8_t flag, bool setting) {
+void setDateTimeFmtFlag(DateTimeFmt *dt_fmt, uint8_t flag, bool setting) {
 	//dt_fmt->flags |= flag;
 	setting ? (dt_fmt->flags |= flag) : (dt_fmt->flags &= ~flag);
 }
 
-bool checkFlag(DateTimeFmt *dt_fmt, uint8_t flag) {
+bool checkDateTimeFmtFlag(DateTimeFmt *dt_fmt, uint8_t flag) {
 	return dt_fmt->flags & flag;
 }
 
-DateTimeFmt guessFormat(char *string) {
+DateTimeFmt guessDateTimeFmt(char *string) {
 	DateTimeFmt output = {0};
 	size_t len = strlen(string);
 	if(len + 1 > DT_FMT_SIZE) {
@@ -119,7 +119,7 @@ DateTimeFmt guessFormat(char *string) {
 					it+= 10;
 					continue;
 				}
-				if(res.locs[0] == 2 && res.locs[1] == 5) { // yebar-month-day
+				if(res.locs[0] == 2 && res.locs[1] == 5) { // year-month-day
 					priv_writeCharsAtIdx(&output.str[output_idx], "%y-%m-%d", 8);
 					output_idx += 8;
 					it+= 8;
@@ -194,16 +194,54 @@ DateTimeFmt guessFormat(char *string) {
 					continue;
 				}
 			}
+			it++;
 		}
 		if(isalpha(*it)) {
+			/*
 			output.str[output_idx] = *it;
 			output_idx++;
+			printf("char is alpha (%%s): %s\n", it);
+			*/
+			size_t keyword_len = 0;
+			char* reset = it;
+			while(isalpha(*it)) {
+				keyword_len++;
+				it++;
+			}
+			it = reset;
+
+			int matched_table = -1;
+			for(int i = 0; i < sizeof(SpecifierTablePairs) / sizeof(SpecifierTablePairs[0]); i++) {
+				int j = 0; // i - SpecifierTablePair, j - index within table
+				while(SpecifierTablePairs[i].table[j] != NULL) {
+					printf("comparing %s with %s\n", SpecifierTablePairs[i].table[j], it);
+					if(0 == strncmp(SpecifierTablePairs[i].table[j], it, keyword_len)) {
+						matched_table = i;
+						break;
+					}
+					j++;
+				}
+				if(matched_table > -1) {
+					priv_writeCharsAtIdx(&output.str[output_idx], "%", 1);
+					output_idx++;
+					char tmp[2] = {SpecifierTablePairs[i].c, '\0'};
+					priv_writeCharsAtIdx(&output.str[output_idx], tmp, 1);
+					output_idx++;
+					//it += strlen(SpecifierTablePairs[i].table[j]);
+					while(isalpha(*it)) {
+						it++;
+					}
+					break;
+				}
+			}
 		}
 		if(*it == '\0') {
 			break;
 		}
-		it++;
+		//it++;
 	}
 	output.str[output_idx] = '\0';
+
+	//printf("%zu\n", sizeof(SpecifierTablePairs) / sizeof(SpecifierTablePairs[0]));
 	return output;
 }

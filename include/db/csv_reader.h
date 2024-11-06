@@ -25,12 +25,12 @@ typedef struct s_CSVReader {
 int initCSVReader(CSVReader *reader);
 int resetCSVReader(CSVReader *reader);
 int termCSVReader(CSVReader *reader);
-int insertRowAtTail(CSVReader *reader, CSVRow *row);
-int insertRowAtHead(CSVReader *reader, CSVRow *row);
+int insertCSVRowAtTail(CSVReader *reader, CSVRow *row);
+int insertCSVRowAtHead(CSVReader *reader, CSVRow *row);
 CSVRow *getCSVRowAtIndex(CSVReader *reader, size_t index);
-int removeRowAtIndex(CSVReader *reader, size_t index);
+int removeCSVRowAtIndex(CSVReader *reader, size_t index);
 int tryCSVRead(CSVReader *reader, const char *filename);
-int setDelim(CSVReader *reader, char delim);
-void printRow(CSVRow *row);
+int setCSVDelim(CSVReader *reader, char delim);
+void printCSVRow(CSVRow *row);
 
 #endif // CSV_READER_H

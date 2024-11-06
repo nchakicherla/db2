@@ -30,7 +30,7 @@ int termCSVReader(CSVReader *reader) {
 	return 0;
 }
 
-int insertRowAtTail(CSVReader *reader, CSVRow *row) {
+int insertCSVRowAtTail(CSVReader *reader, CSVRow *row) {
 	//printf("in insert\n");
 	if(reader->tail) {
 		//printf("true\n");
@@ -46,7 +46,7 @@ int insertRowAtTail(CSVReader *reader, CSVRow *row) {
 	return 0;
 }
 
-int insertRowAtHead(CSVReader *reader, CSVRow *row) {
+int insertCSVRowAtHead(CSVReader *reader, CSVRow *row) {
 	if(reader->head) {
 		reader->head->prev = row;
 		row->next = reader->head;
@@ -85,7 +85,7 @@ CSVRow *getCSVRowAtIndex(CSVReader *reader, size_t index) {
 	return curr;
 }
 
-int removeRowAtIndex(CSVReader *reader, size_t index) {
+int removeCSVRowAtIndex(CSVReader *reader, size_t index) {
 	size_t n = reader->n_rows;
 	if(index >= n) {
 		return 1;
@@ -162,7 +162,7 @@ int tryCSVRead(CSVReader *reader, const char *filename) { // resets CSVReader be
 			temp_row->cols[i] = pNewStr(split_string[i], &reader->p); // copy strings from temporary scratch Arena onto CSVReader-specific Arena
 		}
 		
-		insertRowAtTail(reader, temp_row);
+		insertCSVRowAtTail(reader, temp_row);
 
 		if(*end == '\0') {
 			break;
@@ -178,15 +178,16 @@ int tryCSVRead(CSVReader *reader, const char *filename) { // resets CSVReader be
 	return 0;
 }
 
-int setDelim(CSVReader *reader, char delim) {
+int setCSVDelim(CSVReader *reader, char delim) {
 	if(delim != ',' && delim != ';') {
 		return 1;
 	}
 	reader->delim = delim;
+	printf("new delim: %c\n", reader->delim);
 	return 0;
 }
 
-void printRow(CSVRow *row) {
+void printCSVRow(CSVRow *row) {
 	if(!row) {
 		printf("(none)\n");
 		return;

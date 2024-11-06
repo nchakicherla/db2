@@ -49,11 +49,11 @@ int main(void) {
 	printf("(%p) get row at %d\n", (void *)getCSVRowAtIndex(&reader, 235), 235);
 	
 	CSVRow *res_good = getCSVRowAtIndex(&reader, 235);
-	printRow(res_good);
+	printCSVRow(res_good);
 
 	printf("(%d) try reset csv\n", resetCSVReader(&reader));
 	CSVRow *res_bad = getCSVRowAtIndex(&reader, 235);
-	printRow(res_bad);
+	printCSVRow(res_bad);
 
 	printf("(%d) re-try csv read\n", tryCSVRead(&reader, "./resources/csv/ttc_dataset.csv"));
 	res_good = getCSVRowAtIndex(&reader, 42);
@@ -61,7 +61,7 @@ int main(void) {
 	printf("row->n_cols: %zu\n", res_good->n_cols);
 
 	bool validation = false;
-	printRow(res_good);
+	printCSVRow(res_good);
 	validation = FTValidateRow(res_good, test_schema, (sizeof(test_schema) / sizeof(FieldType)));
 	if(validation) {
 		printf("validation passed!\n");
@@ -73,14 +73,15 @@ int main(void) {
 	DateTimeFmt fmt;
 	initDateTimeFmt(&fmt);
 
-	char *test_date = "03-01";
-	fmt = guessFormat(test_date);
-	printf("trying guessFormat on \'%s\'\n", test_date);
+	char *test_date = "mon 2019-05-17";
+	fmt = guessDateTimeFmt(test_date);
+	printf("trying guessDateTimeFmt on \'%s\'\n", test_date);
 	printf("fmt.str: \'%s\'\n", fmt.str);
 
-	printf("(%d) re-try csv read\n", tryCSVRead(&reader, "./resources/csv/test.csv"));
-	res_good = getCSVRowAtIndex(&reader, 0);
-	printRow(res_good);
+	//setCSVDelim(&reader, ';');
+	printf("(%d) re-try csv read\n", tryCSVRead(&reader, "./resources/csv/ttc_dataset.csv"));
+	res_good = getCSVRowAtIndex(&reader, 1);
+	printCSVRow(res_good);
 
 	termCSVReader(&reader);
 	return 0;
@@ -92,7 +93,7 @@ int main(void) {
 	size_t counter = 1;
 	for (size_t i = 100; i < 130; i++) {
 		printf("(%p) get row at %zu\n", (void *)getCSVRowAtIndex(&reader, i), i);
-		printf("(%d) remove row at %zu\n", removeRowAtIndex(&reader, i), i);
+		printf("(%d) remove row at %zu\n", removeCSVRowAtIndex(&reader, i), i);
 		counter++;
 	}
 */

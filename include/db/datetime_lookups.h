@@ -3,22 +3,6 @@
 
 #include <stddef.h>
 
-char *MONTHS_FULL[] = {
-	"january",
-	"february",
-	"march",
-	"april",
-	"may",
-	"june",
-	"july",
-	"august",
-	"september",
-	"october",
-	"november",
-	"december",
-	NULL,
-};
-
 char *MONTHS_SHORT[] = {
 	"jan",
 	"feb",
@@ -35,14 +19,19 @@ char *MONTHS_SHORT[] = {
 	NULL,
 };
 
-char *DAYS_FULL[] = {
-	"sunday",
-	"monday",
-	"tuesday",
-	"wednesday",
-	"thursday",
-	"friday",
-	"saturday",
+char *MONTHS_FULL[] = {
+	"january",
+	"february",
+	"march",
+	"april",
+	"may",
+	"june",
+	"july",
+	"august",
+	"september",
+	"october",
+	"november",
+	"december",
 	NULL,
 };
 
@@ -57,24 +46,34 @@ char *DAYS_SHORT[] = {
 	NULL,
 };
 
+char *DAYS_FULL[] = {
+	"sunday",
+	"monday",
+	"tuesday",
+	"wednesday",
+	"thursday",
+	"friday",
+	"saturday",
+	NULL,
+};
+
 char *PERIOD[] = {
 	"am",
 	"pm",
 	NULL,
 };
 
-struct s_CharTablePair {
+struct s_SpecifierTablePair {
 	char c;
-	char **literal;
+	char **table;
 };
 
-struct s_CharTablePair table[] = {
-	{'B', MONTHS_FULL},
+struct s_SpecifierTablePair SpecifierTablePairs[] = {
 	{'b', MONTHS_SHORT},
-	{'U', DAYS_FULL},
+	{'B', MONTHS_FULL},
 	{'u', DAYS_SHORT},
-	{'p', PERIOD},
-	{0}
+	{'U', DAYS_FULL},
+	{'p', PERIOD}
 };
 
 #endif // DATETIME_LOOKUPS_H
