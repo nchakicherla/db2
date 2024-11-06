@@ -138,7 +138,7 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 					output_idx += 5;
 					it+= 5;
 					continue;
-				}				
+				}
 			}
 
 			res = priv_findCharInString(it, ':');
@@ -197,11 +197,6 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 			it++;
 		}
 		if(isalpha(*it)) {
-			/*
-			output.str[output_idx] = *it;
-			output_idx++;
-			printf("char is alpha (%%s): %s\n", it);
-			*/
 			size_t keyword_len = 0;
 			char* reset = it;
 			while(isalpha(*it)) {
@@ -212,9 +207,8 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 
 			int matched_table = -1;
 			for(int i = 0; i < sizeof(SpecifierTablePairs) / sizeof(SpecifierTablePairs[0]); i++) {
-				int j = 0; // i - SpecifierTablePair, j - index within table
+				int j = 0; // i - SpecifierTablePair index, j - index within table
 				while(SpecifierTablePairs[i].table[j] != NULL) {
-					printf("comparing %s with %s\n", SpecifierTablePairs[i].table[j], it);
 					if(0 == strncmp(SpecifierTablePairs[i].table[j], it, keyword_len)) {
 						matched_table = i;
 						break;
@@ -227,7 +221,6 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 					char tmp[2] = {SpecifierTablePairs[i].c, '\0'};
 					priv_writeCharsAtIdx(&output.str[output_idx], tmp, 1);
 					output_idx++;
-					//it += strlen(SpecifierTablePairs[i].table[j]);
 					while(isalpha(*it)) {
 						it++;
 					}
@@ -235,13 +228,7 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 				}
 			}
 		}
-		if(*it == '\0') {
-			break;
-		}
-		//it++;
 	}
 	output.str[output_idx] = '\0';
-
-	//printf("%zu\n", sizeof(SpecifierTablePairs) / sizeof(SpecifierTablePairs[0]));
 	return output;
 }
