@@ -120,7 +120,7 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 					continue;
 				}
 				// year-month-day
-				if(res.locs[0] == 2 && res.locs[1] == 5 && !isdigit(*(it + 8)) && !isdigit(*(it + 9))) {
+				if(res.locs[0] == 2 && res.locs[1] == 5 && !isdigit(*(it + 8))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%y-%m-%d", 8);
 					output_idx += 8;
 					it+= 8;
@@ -135,13 +135,15 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 				}				
 			}
 			if(res.n == 1) {
-				if(res.locs[0] == 4 && !isdigit(*(it + 7))) { // YEAR-month
+				// YEAR-month
+				if(res.locs[0] == 4 && !isdigit(*(it + 7))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%Y-%m", 5);
 					output_idx += 5;
 					it+= 7;
 					continue;
 				}
-				if(res.locs[0] == 2 && !isdigit(*(it + 5))) { // month-day
+				// month-day
+				if(res.locs[0] == 2 && !isdigit(*(it + 5))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%m-%d", 5);
 					output_idx += 5;
 					it+= 5;
@@ -152,7 +154,7 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 			res = priv_findCharInString(it, ':');
 			if(res.n == 2) {
 				// 24-hour:minute:second
-				if(res.locs[0] == 2 && res.locs[1] == 5) {
+				if(res.locs[0] == 2 && res.locs[1] == 5 && !isdigit(*(it + 8))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%H:%M:%S", 8);
 					output_idx += 8;
 					it+= 8;
@@ -161,7 +163,7 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 			}
 			if(res.n == 1) {
 				// minute:second
-				if(res.locs[0] == 2 && !isdigit(*(it + 7))) {
+				if(res.locs[0] == 2 && !isdigit(*(it + 5))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%M:%S", 5);
 					output_idx += 5;
 					it+= 5;
@@ -172,7 +174,7 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 			res = priv_findCharInString(it, '/');
 			if(res.n == 2) {
 				// YEAR/month/day
-				if(res.locs[0] == 4 && res.locs[1] == 7) {
+				if(res.locs[0] == 4 && res.locs[1] == 7 && !isdigit(*(it + 10))) {
 					priv_writeCharsAtIdx(&output.str[output_idx], "%Y/%m/%d", 8);
 					output_idx += 8;
 					it+= 10;
@@ -217,11 +219,13 @@ DateTimeFmt guessDateTimeFmt(char *string) {
 			for(int i = 0; i < sizeof(SpecifierTablePairs) / sizeof(SpecifierTablePairs[0]); i++) {
 				int j = 0; // i - SpecifierTablePair index, j - index within table
 				while(SpecifierTablePairs[i].table[j] != NULL) {
-					char tmp[keyword_len + 1];
+
+					char tmp[keyword_len + 1]; // make lowercase version
 					for(size_t i = 0; i < keyword_len; i++) {
 						tmp[i] = tolower(it[i]);
 					}
 					tmp[keyword_len] = '\0';
+
 					if(0 == strncmp(SpecifierTablePairs[i].table[j], tmp, keyword_len)) {
 						matched_table = i;
 						break;

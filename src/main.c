@@ -56,7 +56,7 @@ int main(void) {
 	printCSVRow(res_bad);
 
 	printf("(%d) re-try csv read\n", tryCSVRead(&reader, "./resources/csv/ttc_dataset.csv"));
-	res_good = getCSVRowAtIndex(&reader, 42);
+	res_good = getCSVRowAtIndex(&reader, 1);
 	
 	printf("row->n_cols: %zu\n", res_good->n_cols);
 
@@ -73,9 +73,11 @@ int main(void) {
 	DateTimeFmt fmt;
 	initDateTimeFmt(&fmt);
 
-	char *test_date = "wed 11-06-2024";
+	char *test_date = "Wednesday, November 6th, 2024";
 	fmt = guessDateTimeFmt(test_date);
 	printf("trying guessDateTimeFmt on \'%s\'\n", test_date);
+	printf("fmt.str: \'%s\'\n", fmt.str);
+	printf("(%d) set DateTimeFmt\n", setDateTimeFmt(&fmt, "%U, %B %dth, %Y"));
 	printf("fmt.str: \'%s\'\n", fmt.str);
 
 	printf("(%d) re-try csv read\n", tryCSVRead(&reader, "./resources/csv/ttc_dataset.csv"));
